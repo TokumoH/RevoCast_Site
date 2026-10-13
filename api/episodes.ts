@@ -30,6 +30,9 @@ type ChannelResponse = {
   }>
 }
 type PlaylistResponse = { items?: PlaylistItem[]; nextPageToken?: string }
+type VideoDetailsResponse = {
+  items?: Array<{ id?: string; liveStreamingDetails?: Record<string, string> }>
+}
 
 const count = (value?: string) => {
   const parsed = Number(value)
@@ -108,6 +111,31 @@ export default async function handler(request: IncomingMessage, response: Server
       pageToken = playlist.nextPageToken
     } while (pageToken)
 
+    const videoIds = items
+      .map((item) => item.contentDetails?.videoId)
+      .filter((videoId): videoId is string => Boolean(videoId))
+    const liveVideoIds = new Set<string>()
+
+    for (let start = 0; start < videoIds.length; start += 50) {
+      const videoDetailsEndpoint = new URL("https://www.googleapis.com/youtube/v3/videos")
+      videoDetailsEndpoint.search = new URLSearchParams({
+        part: "liveStreamingDetails",
+        id: videoIds.slice(start, start + 50).join(","),
+        key: apiKey,
+      }).toString()
+
+      const videoDetailsResponse = await fetch(videoDetailsEndpoint)
+      if (!videoDetailsResponse.ok) {
+        respond(response, 502, { error: "Não foi possível classificar os vídeos do canal." })
+        return
+      }
+
+      const videoDetails = (await videoDetailsResponse.json()) as VideoDetailsResponse
+      for (const video of videoDetails.items ?? []) {
+        if (video.id && video.liveStreamingDetails) liveVideoIds.add(video.id)
+      }
+    }
+
     const episodes: ApiEpisode[] = items
       .map((item) => {
         const videoId = item.contentDetails?.videoId
@@ -117,6 +145,7 @@ export default async function handler(request: IncomingMessage, response: Server
         return {
           id: videoId,
           youtubeId: videoId,
+          tag: liveVideoIds.has(videoId) ? "Episódio" : "Corte",
           title: item.snippet?.title ?? "Vídeo sem título",
           description: item.snippet?.description ?? "",
           thumbnail:

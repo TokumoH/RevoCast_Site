@@ -8,16 +8,17 @@ import "../episodes.css"
 
 export default function EpisodesSection() {
   const episodes = useEpisodes()
-  const latestEpisode = episodes[episodes.length - 1]
+  const recentEpisodes = episodes.slice(-7)
+  const latestEpisode = recentEpisodes[recentEpisodes.length - 1]
 
   return (
     <section className="section" id={anchorId(links.anchors.episodes)}>
       <div className="container">
         <SectionTitle eyebrow={episodesCopy.eyebrow} title={episodesCopy.title} note={episodesCopy.note} />
         {latestEpisode && <LatestEpisode episode={latestEpisode} />}
-        {episodes.length > 1 && (
+        {recentEpisodes.length > 1 && (
           <div className="episodes__grid">
-            {episodes.slice(0, -1).map((episode, index) => (
+            {recentEpisodes.slice(0, -1).map((episode, index) => (
               <EpisodeCard key={episode.id} episode={episode} index={index} />
             ))}
           </div>

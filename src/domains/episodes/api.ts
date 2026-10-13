@@ -5,7 +5,7 @@ function isApiEpisode(value: unknown): value is ApiEpisode {
   if (typeof value !== "object" || value === null) return false
 
   const episode = value as Record<string, unknown>
-  return ["id", "title", "description", "youtubeId", "thumbnail"].every(
+  return ["id", "title", "description", "tag", "youtubeId", "thumbnail"].every(
     (field) => typeof episode[field] === "string",
   )
 }
@@ -34,7 +34,6 @@ async function requestYouTubeData(): Promise<{ episodes: Episode[]; stats: Chann
     const fallback = fallbackByVideoId.get(episode.youtubeId)
     return {
       ...episode,
-      tag: fallback?.tag ?? "RevoCast",
       thumbnail: fallback?.thumbnail || episode.thumbnail,
     }
   })

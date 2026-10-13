@@ -110,7 +110,7 @@ domains/<domínio>/
 `src/shared/config/images.ts` (ex.: `slot("episodes/ep01.jpg")`). Também vale colar um link completo
 (`https://...`). Variável vazia (`slot("")`) mostra um espaço reservado.
 
-**Atualização dos vídeos e estatísticas:** na Vercel, o site busca todos os vídeos e transmissões públicas da playlist de envios do canal. Títulos, descrições e miniaturas vêm do YouTube; os dados em `src/domains/episodes/fallback.ts` são usados se a API estiver indisponível. Tags e capas personalizadas dos vídeos já cadastrados continuam sendo aproveitadas desse fallback. A lista da API é exibida do mais antigo ao mais recente para manter o vídeo mais recente em destaque. A seção Sobre mostra a quantidade total de vídeos, visualizações e inscritos do canal; se os inscritos estiverem ocultos pelo YouTube ou a API não responder, o site mostra `—`.
+**Atualização dos vídeos e estatísticas:** na Vercel, o site busca todos os vídeos e transmissões públicas da playlist de envios do canal, mas exibe apenas os sete mais recentes: um em destaque e seis abaixo. Títulos, descrições e miniaturas vêm do YouTube. As tags são automáticas: transmissões com dados de live recebem "Episódio"; os demais vídeos recebem "Corte". Capas personalizadas dos vídeos cadastrados continuam sendo aproveitadas de `src/domains/episodes/fallback.ts`. A seção Sobre mostra a quantidade total de vídeos, visualizações e inscritos do canal; se os inscritos estiverem ocultos pelo YouTube ou a API não responder, o site mostra `—`.
 
 ### YouTube Data API na Vercel
 

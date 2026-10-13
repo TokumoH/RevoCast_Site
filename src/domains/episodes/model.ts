@@ -9,7 +9,7 @@ export type Episode = {
   thumbnail: string
 }
 
-export type ApiEpisode = Pick<Episode, "id" | "title" | "description" | "youtubeId" | "thumbnail">
+export type ApiEpisode = Pick<Episode, "id" | "title" | "description" | "tag" | "youtubeId" | "thumbnail">
 
 export type ChannelStats = {
   videoCount: number
