@@ -1,8 +1,8 @@
 export const episodesCopy = {
   eyebrow: "No ar",
-  title: "Episódios em destaque",
+  title: "Últimos vídeos e transmissões",
   note: "clica na capa pra assistir ↓",
   moreLabel: "Ver todos no YouTube",
-  latestLabel: "Último episódio lançado",
-  latestAction: "Assistir episódio",
+  latestLabel: "Último vídeo publicado",
+  latestAction: "Assistir vídeo",
 }

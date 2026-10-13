@@ -110,12 +110,12 @@ domains/<domínio>/
 `src/shared/config/images.ts` (ex.: `slot("episodes/ep01.jpg")`). Também vale colar um link completo
 (`https://...`). Variável vazia (`slot("")`) mostra um espaço reservado.
 
-**Atualização dos episódios e estatísticas:** na Vercel, o site busca automaticamente os 12 vídeos mais recentes da playlist de uploads configurada. Títulos, descrições e miniaturas vêm do YouTube; os dados em `src/domains/episodes/fallback.ts` são usados se a API estiver indisponível. Tags e capas personalizadas dos episódios já cadastrados continuam sendo aproveitadas desse fallback. A lista da API é exibida do mais antigo ao mais recente para manter o último episódio em destaque. A seção Sobre mostra a contagem total de vídeos, visualizações e inscritos do canal; se os inscritos estiverem ocultos pelo YouTube ou a API não responder, o site mostra `—`.
+**Atualização dos vídeos e estatísticas:** na Vercel, o site busca todos os vídeos e transmissões públicas da playlist de envios do canal. Títulos, descrições e miniaturas vêm do YouTube; os dados em `src/domains/episodes/fallback.ts` são usados se a API estiver indisponível. Tags e capas personalizadas dos vídeos já cadastrados continuam sendo aproveitadas desse fallback. A lista da API é exibida do mais antigo ao mais recente para manter o vídeo mais recente em destaque. A seção Sobre mostra a quantidade total de vídeos, visualizações e inscritos do canal; se os inscritos estiverem ocultos pelo YouTube ou a API não responder, o site mostra `—`.
 
 ### YouTube Data API na Vercel
 
 1. No Google Cloud Console, crie um projeto, ative **YouTube Data API v3** e gere uma chave de API. Restrinja a chave à YouTube Data API v3. A chave é usada apenas pela função serverless; não a coloque em variáveis com prefixo `VITE_`.
-2. Na Vercel, abra **Project Settings > Environment Variables** e adicione somente `YOUTUBE_API_KEY` para os ambientes desejados. O endpoint descobre o canal e a playlist de uploads pelo link do YouTube em `src/shared/config/links.ts`. Depois, faça um novo deploy.
+2. Na Vercel, abra **Project Settings > Environment Variables** e adicione somente `YOUTUBE_API_KEY` para os ambientes desejados. O endpoint descobre o canal pelo link do YouTube em `src/shared/config/links.ts` e consulta a playlist de envios, que inclui vídeos e transmissões. Depois, faça um novo deploy.
 3. A Vercel lê `vercel.json` automaticamente. Não é necessário YAML: esse projeto usa `vercel.json` para configurar o build (`npm run build`) e a saída (`dist`). A pasta `api/` é publicada como função serverless.
 
 Para testar localmente com a função habilitada, copie `.env.example` para `.env.local`, preencha `YOUTUBE_API_KEY` e execute `npx vercel dev` (se necessário, faça `npx vercel login` e `npx vercel link` primeiro). `npm run dev` inicia apenas o Vite; nesse modo, a tela continua usando os dados de fallback. A função mantém os dados em cache por uma hora.

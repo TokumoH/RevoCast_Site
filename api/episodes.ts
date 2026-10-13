@@ -5,7 +5,6 @@ import { links } from "../src/shared/config/links.js"
 type PlaylistItem = {
   contentDetails?: { videoId?: string }
   snippet?: {
-    channelId?: string
     title?: string
     description?: string
     thumbnails?: {
@@ -20,6 +19,7 @@ type PlaylistItem = {
 
 type ChannelResponse = {
   items?: Array<{
+    id?: string
     contentDetails?: { relatedPlaylists?: { uploads?: string } }
     statistics?: {
       videoCount?: string
@@ -29,7 +29,7 @@ type ChannelResponse = {
     }
   }>
 }
-type PlaylistResponse = { items?: PlaylistItem[] }
+type PlaylistResponse = { items?: PlaylistItem[]; nextPageToken?: string }
 
 const count = (value?: string) => {
   const parsed = Number(value)
@@ -73,28 +73,42 @@ export default async function handler(request: IncomingMessage, response: Server
 
     const channelData = (await channelResponse.json()) as ChannelResponse
     const channel = channelData.items?.[0]
-    const playlistId = channel?.contentDetails?.relatedPlaylists?.uploads
-    if (!channel || !playlistId) {
-      respond(response, 502, { error: "Não foi possível localizar a playlist de uploads do canal." })
+    if (!channel?.id) {
+      respond(response, 502, { error: "Não foi possível localizar o canal no YouTube." })
       return
     }
 
-    const playlistEndpoint = new URL("https://www.googleapis.com/youtube/v3/playlistItems")
-    playlistEndpoint.search = new URLSearchParams({
-      part: "snippet,contentDetails",
-      playlistId,
-      maxResults: "50",
-      key: apiKey,
-    }).toString()
-
-    const playlistResponse = await fetch(playlistEndpoint)
-    if (!playlistResponse.ok) {
-      respond(response, 502, { error: "Não foi possível consultar a playlist do canal no YouTube." })
+    const playlistId = channel.contentDetails?.relatedPlaylists?.uploads
+    if (!playlistId) {
+      respond(response, 502, { error: "Não foi possível localizar a playlist de envios do canal." })
       return
     }
 
-    const playlist = (await playlistResponse.json()) as PlaylistResponse
-    const episodes: ApiEpisode[] = (playlist.items ?? [])
+    const items: PlaylistItem[] = []
+    let pageToken: string | undefined
+    do {
+      const playlistEndpoint = new URL("https://www.googleapis.com/youtube/v3/playlistItems")
+      const params = new URLSearchParams({
+        part: "snippet,contentDetails",
+        playlistId,
+        maxResults: "50",
+        key: apiKey,
+      })
+      if (pageToken) params.set("pageToken", pageToken)
+      playlistEndpoint.search = params.toString()
+
+      const playlistResponse = await fetch(playlistEndpoint)
+      if (!playlistResponse.ok) {
+        respond(response, 502, { error: "Não foi possível consultar os envios do canal no YouTube." })
+        return
+      }
+
+      const playlist = (await playlistResponse.json()) as PlaylistResponse
+      items.push(...(playlist.items ?? []))
+      pageToken = playlist.nextPageToken
+    } while (pageToken)
+
+    const episodes: ApiEpisode[] = items
       .map((item) => {
         const videoId = item.contentDetails?.videoId
         if (!videoId) return null
@@ -103,7 +117,7 @@ export default async function handler(request: IncomingMessage, response: Server
         return {
           id: videoId,
           youtubeId: videoId,
-          title: item.snippet?.title ?? "Episódio sem título",
+          title: item.snippet?.title ?? "Vídeo sem título",
           description: item.snippet?.description ?? "",
           thumbnail:
             thumbnails?.maxres?.url ??
@@ -115,7 +129,6 @@ export default async function handler(request: IncomingMessage, response: Server
         }
       })
       .filter((episode): episode is ApiEpisode => episode !== null)
-      .slice(0, 12)
       .reverse()
 
     const channelStatistics = channel.statistics
