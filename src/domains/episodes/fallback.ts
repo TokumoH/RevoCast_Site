@@ -1,0 +1,13 @@
+import { images } from "@/shared/config/images"
+import type { Episode } from "./model"
+
+// Dados exibidos quando a API da Vercel/YouTube não está disponível.
+export const fallbackEpisodes: Episode[] = [
+  { id: "ep01", title: "1º Episódio RevoCast - Encontro de Gerações (ESTREIA)", description: "Aqui se inicia uma nova jornada! Em primeira mão a Atlética Revoada tem o prazer em apresentar o 1º episódio do RevoCast, um espaço voltado para a interação, exposição e troca de ideia entre alunos, servidores e quaisquer pessoas interessadas em uma boa conversa e/ou discussão.", tag: "Faculdade", youtubeId: "kePBk0_bCt8", thumbnail: images.episodes.ep01 },
+  { id: "ep02", title: "2º Episódio RevoCast - Engenheiro do Futuro: Homem e a Máquina", description: "Neste 2º Episódio da 1ªTemporada do RevoCast, Wanessa Lima e Laura Riitano discutem com Profº Dr. Renato Correia de Barros a respeito da atuação da inteligência artificial nos dias de hoje, desde os seus benefícios, como ela funciona, assim como seu malefícios e impactos sociais e geopolíticos.", tag: "Projetos", youtubeId: "myJfo8VtTpI", thumbnail: images.episodes.ep02 },
+  { id: "ep03", title: "3º Episódio RevoCast - Além do Código: Uma Visão Docente da Era Digital", description: "Neste 3º Episódio da 1ª Temporada do RevoCast, Wanessa Lima e Laura Riitano recebem a Prof.ª Karina, docente do Instituto Federal com longa trajetória na área da computação. O foco da conversa é a intersecção entre Educação e Tecnologia, explorando como as ferramentas digitais e a inteligência artificial estão a moldar o ensino, sem esquecer os desafios da inclusão e o papel insubstituível do fator humano.", tag: "Convidado", youtubeId: "IjBzLjtRdKA", thumbnail: images.episodes.ep03 },
+  { id: "ep04", title: "4º Episódio RevoCast - Campeões de Ideias: uma Apresentação à Programação Competitiva", description: "Escreva aqui uma frase sobre o assunto do episódio.", tag: "Faculdade", youtubeId: "MxQ98BfiZSc", thumbnail: images.episodes.ep04 },
+  { id: "ep05", title: "5º Episódio RevoCast - Inversão de Papéis", description: "Escreva aqui uma frase sobre o assunto do episódio.", tag: "Projetos", youtubeId: "GXQrSkFVU9U", thumbnail: images.episodes.ep05 },
+  { id: "ep06", title: "6º Episódio RevoCast - Encontro de Gerações, vol.2", description: "Escreva aqui uma frase sobre o assunto do episódio.", tag: "Convidado", youtubeId: "F6YxEz2smHs", thumbnail: images.episodes.ep06 },
+  { id: "ep07", title: "7º Episódio RevoCast - Projetando Saberes: O Valor da Iniciação Científica", description: "Escreva aqui uma frase sobre o assunto do episódio.", tag: "Convidado", youtubeId: "cO3VpvH9Aq8", thumbnail: images.episodes.ep07 },
+]

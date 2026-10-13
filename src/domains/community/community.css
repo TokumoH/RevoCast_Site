@@ -1,0 +1,5 @@
+.join__grid { display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+.join__card { display: grid; justify-items: start; gap: 16px; padding: 30px; }
+.join__card h3 { font-size: 32px; }
+.join__star { top: -22px; right: 22px; width: 52px; color: var(--sand); transform: rotate(12deg); }
+@media (max-width: 760px) { .join__grid { grid-template-columns: 1fr; } }

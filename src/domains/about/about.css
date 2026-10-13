@@ -1,0 +1,11 @@
+.about { background: var(--sand-soft); border-block: var(--border); }
+.about__grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 56px; align-items: center; }
+.about__text { display: grid; gap: 16px; }
+.about__text .section-title { margin-bottom: 8px; }
+.about__badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 6px; }
+.about__stats { display: flex; flex-wrap: wrap; gap: 20px; margin-top: 18px; }
+.stat { display: grid; justify-items: center; min-width: 120px; padding: 12px 20px; box-shadow: 4px 4px 0 var(--ink); }
+.stat strong { font: 400 40px/1 var(--font-display); }
+.stat span { font-weight: 800; font-size: 14px; }
+.about__photo { aspect-ratio: 4 / 3; padding: 14px; }
+@media (max-width: 900px) { .about__grid { grid-template-columns: 1fr; gap: 40px; } }

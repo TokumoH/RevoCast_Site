@@ -1,0 +1,22 @@
+/* Cores e medidas do site. Para mudar a paleta, altere só este arquivo. */
+:root {
+  --ink: #1b1b22;
+  --paper: #fffaf4;
+  --pink: #d83868;
+  --pink-soft: #ffd6e3;
+  --cyan: #27bfe8;
+  --cyan-soft: #d2f1fb;
+  --sand: #d8b888;
+  --sand-soft: #f6e6cf;
+  --gray: #686868;
+
+  --radius: 20px;
+  --border: 3px solid var(--ink);
+  --shadow: 6px 6px 0 var(--ink);
+  --max: 1240px;
+  --header-h: 69px; /* altura do cabeçalho fixo */
+
+  --font-display: "Lilita One", "Trebuchet MS", sans-serif;
+  --font-body: "Nunito", system-ui, sans-serif;
+  --font-hand: "Caveat", cursive;
+}

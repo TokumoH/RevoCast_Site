@@ -1,0 +1,44 @@
+/* Animações do site. Todas respeitam "reduzir movimento" (bloco no final). */
+
+/* Entrada ao rolar: o elemento "cola" na página como um adesivo */
+.reveal { opacity: 0; }
+.reveal.is-visible { animation: stick 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) var(--reveal-delay, 0ms) both; }
+.reveal--rise.is-visible { animation: rise 0.7s ease-out var(--reveal-delay, 0ms) both; }
+@keyframes stick {
+  from { opacity: 0; translate: 0 -36px; scale: 1.1; rotate: -4deg; }
+  60% { opacity: 1; }
+  to { opacity: 1; translate: 0 0; scale: 1; rotate: 0deg; }
+}
+@keyframes rise {
+  from { opacity: 0; translate: 0 24px; }
+  to { opacity: 1; translate: 0 0; }
+}
+
+/* Flutuar (logo) e pulsar (rabiscos) */
+.float { animation: float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite; }
+@keyframes float { 50% { translate: 0 -12px; rotate: 0.8deg; } }
+.doodle { animation: pulse 3.4s ease-in-out infinite; }
+@keyframes pulse { 50% { scale: 1.16; } }
+@keyframes spin { to { rotate: 360deg; } }
+@keyframes nudge { 50% { translate: 6px 8px; } }
+
+/* Balão: pulinho ao aparecer e ao trocar de frase */
+@keyframes pop { 0% { scale: 0.6; opacity: 0; } 60% { scale: 1.12; opacity: 1; } 100% { scale: 1; opacity: 1; } }
+.bubble__text { display: inline-block; animation: pop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* Reação ao mouse: cartão endireita, sobe e a sombra cresce */
+.hoverable { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+.hoverable:hover { transform: rotate(0deg) translateY(-6px); box-shadow: 10px 10px 0 var(--ink); }
+.btn:hover { animation: wiggle 0.45s ease; }
+@keyframes wiggle { 25% { rotate: -3deg; } 75% { rotate: 3deg; } }
+
+/* Rabisco do título se desenhando */
+.section-title__squiggle path { stroke-dasharray: 1; stroke-dashoffset: 1; }
+.section-title.is-visible .section-title__squiggle path { animation: draw 0.9s ease-out 0.3s both; }
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; }
+  .reveal.is-visible, .reveal--rise.is-visible, .float, .doodle, .bubble__text, .btn:hover { animation: none; }
+  .section-title__squiggle path { stroke-dashoffset: 0; animation: none; }
+}
