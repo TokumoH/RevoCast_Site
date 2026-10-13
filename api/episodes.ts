@@ -1,9 +1,10 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
-import type { ApiEpisode } from "../src/domains/episodes/model"
+import type { ApiEpisode, ChannelStats, YouTubeData } from "../src/domains/episodes/model"
 
 type PlaylistItem = {
   contentDetails?: { videoId?: string }
   snippet?: {
+    channelId?: string
     title?: string
     description?: string
     thumbnails?: {
@@ -17,6 +18,21 @@ type PlaylistItem = {
 }
 
 type PlaylistResponse = { items?: PlaylistItem[] }
+type ChannelResponse = {
+  items?: Array<{
+    statistics?: {
+      videoCount?: string
+      viewCount?: string
+      subscriberCount?: string
+      hiddenSubscriberCount?: boolean
+    }
+  }>
+}
+
+const count = (value?: string) => {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) ? parsed : 0
+}
 
 function respond(response: ServerResponse, status: number, body: unknown) {
   response.statusCode = status
@@ -78,8 +94,37 @@ export default async function handler(request: IncomingMessage, response: Server
       .slice(0, 12)
       .reverse()
 
+    let stats: ChannelStats | null = null
+    const channelId = playlist.items?.[0]?.snippet?.channelId
+    if (channelId) {
+      const channelEndpoint = new URL("https://www.googleapis.com/youtube/v3/channels")
+      channelEndpoint.search = new URLSearchParams({
+        part: "statistics",
+        id: channelId,
+        key: apiKey,
+      }).toString()
+
+      const channelResponse = await fetch(channelEndpoint)
+      if (channelResponse.ok) {
+        const channel = (await channelResponse.json()) as ChannelResponse
+        const channelStatistics = channel.items?.[0]?.statistics
+        if (channelStatistics) {
+          stats = {
+            videoCount: count(channelStatistics.videoCount),
+            viewCount: count(channelStatistics.viewCount),
+            subscriberCount: channelStatistics.hiddenSubscriberCount
+              ? null
+              : channelStatistics.subscriberCount === undefined
+                ? null
+                : count(channelStatistics.subscriberCount),
+          }
+        }
+      }
+    }
+
     response.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400")
-    respond(response, 200, episodes)
+    const data: YouTubeData = { episodes, stats }
+    respond(response, 200, data)
   } catch {
     respond(response, 502, { error: "Erro ao carregar episódios do YouTube." })
   }

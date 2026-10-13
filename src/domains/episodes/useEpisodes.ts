@@ -1,17 +1,20 @@
 import { useEffect, useState } from "react"
-import { fetchEpisodes } from "./api"
+import { fetchYouTubeData } from "./api"
 import { fallbackEpisodes } from "./fallback"
-import type { Episode } from "./model"
+import type { ChannelStats, Episode } from "./model"
 
-export function useEpisodes() {
-  const [episodes, setEpisodes] = useState<Episode[]>(fallbackEpisodes)
+export function useYouTubeData() {
+  const [data, setData] = useState<{ episodes: Episode[]; stats: ChannelStats | null }>({
+    episodes: fallbackEpisodes,
+    stats: null,
+  })
 
   useEffect(() => {
     let active = true
 
-    fetchEpisodes()
-      .then((apiEpisodes) => {
-        if (active) setEpisodes(apiEpisodes)
+    fetchYouTubeData()
+      .then((youtubeData) => {
+        if (active) setData(youtubeData)
       })
       .catch(() => undefined)
 
@@ -20,5 +23,9 @@ export function useEpisodes() {
     }
   }, [])
 
-  return episodes
+  return data
+}
+
+export function useEpisodes() {
+  return useYouTubeData().episodes
 }

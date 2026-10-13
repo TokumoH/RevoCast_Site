@@ -12,10 +12,10 @@ export const aboutCopy = {
 
 // ✏️ Números do podcast (troque os valores).
 export const stats = [
-  { value: "07", label: "episódios" },
-  { value: "12", label: "convidados" },
-  { value: "1316", label: "visualizações" },
-]
+  { key: "videoCount", label: "vídeos" },
+  { key: "subscriberCount", label: "inscritos" },
+  { key: "viewCount", label: "visualizações" },
+] as const
 
 // Selos de respaldo.
 export const badges = ["Atlética Revoada", "IFSP · campus Birigui", "Feito por estudantes"]

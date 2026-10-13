@@ -10,3 +10,14 @@ export type Episode = {
 }
 
 export type ApiEpisode = Pick<Episode, "id" | "title" | "description" | "youtubeId" | "thumbnail">
+
+export type ChannelStats = {
+  videoCount: number
+  viewCount: number
+  subscriberCount: number | null
+}
+
+export type YouTubeData = {
+  episodes: ApiEpisode[]
+  stats: ChannelStats | null
+}

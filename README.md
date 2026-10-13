@@ -81,7 +81,7 @@ revocast-site/
         │   ├── api.ts         #   cliente HTTP e adaptação da resposta
         │   ├── fallback.ts    #   conteúdo local se a API falhar
         │   ├── useEpisodes.ts #   hook que carrega API + fallback
-        │   └── model.ts       #   tipos de episódio e resposta da API
+        │   └── model.ts       #   tipos de episódio e estatísticas do canal
         ├── about/             # Sobre o podcast, números e selos de respaldo
         ├── community/         # Convidados e plateia ("Participe")
         └── contact/           # Plataformas e formas de contato
@@ -110,7 +110,7 @@ domains/<domínio>/
 `src/shared/config/images.ts` (ex.: `slot("episodes/ep01.jpg")`). Também vale colar um link completo
 (`https://...`). Variável vazia (`slot("")`) mostra um espaço reservado.
 
-**Atualização dos episódios:** na Vercel, o site busca automaticamente os 12 vídeos mais recentes da playlist de uploads configurada. Títulos, descrições e miniaturas vêm do YouTube; os dados em `src/domains/episodes/fallback.ts` são usados se a API estiver indisponível. Tags e capas personalizadas dos episódios já cadastrados continuam sendo aproveitadas desse fallback. A lista da API é exibida do mais antigo ao mais recente para manter o último episódio em destaque.
+**Atualização dos episódios e estatísticas:** na Vercel, o site busca automaticamente os 12 vídeos mais recentes da playlist de uploads configurada. Títulos, descrições e miniaturas vêm do YouTube; os dados em `src/domains/episodes/fallback.ts` são usados se a API estiver indisponível. Tags e capas personalizadas dos episódios já cadastrados continuam sendo aproveitadas desse fallback. A lista da API é exibida do mais antigo ao mais recente para manter o último episódio em destaque. A seção Sobre mostra a contagem total de vídeos, visualizações e inscritos do canal; se os inscritos estiverem ocultos pelo YouTube ou a API não responder, o site mostra `—`.
 
 ### YouTube Data API na Vercel
 
@@ -160,5 +160,5 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 ## Pendências conhecidas
 
 - `links.platforms.amazonMusic`, `links.contact.whatsapp` e `links.contact.guestForm` ainda podem ser preenchidos conforme os links estiverem disponíveis.
-- Os números da seção Sobre e a foto da equipe ainda são conteúdo editável localmente.
+- A foto da equipe ainda é conteúdo editável localmente. As estatísticas são totais do canal e podem incluir vídeos que não sejam episódios do podcast.
 - Sem as variáveis da API ou quando a consulta falha, a seção de episódios usa `src/domains/episodes/fallback.ts`.
