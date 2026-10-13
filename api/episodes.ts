@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
 import type { ApiEpisode, ChannelStats, YouTubeData } from "../src/domains/episodes/model"
+import { links } from "../src/shared/config/links"
 
 type PlaylistItem = {
   contentDetails?: { videoId?: string }
@@ -17,9 +18,9 @@ type PlaylistItem = {
   }
 }
 
-type PlaylistResponse = { items?: PlaylistItem[] }
 type ChannelResponse = {
   items?: Array<{
+    contentDetails?: { relatedPlaylists?: { uploads?: string } }
     statistics?: {
       videoCount?: string
       viewCount?: string
@@ -28,6 +29,7 @@ type ChannelResponse = {
     }
   }>
 }
+type PlaylistResponse = { items?: PlaylistItem[] }
 
 const count = (value?: string) => {
   const parsed = Number(value)
@@ -48,28 +50,50 @@ export default async function handler(request: IncomingMessage, response: Server
   }
 
   const apiKey = process.env.YOUTUBE_API_KEY
-  const playlistId = process.env.YOUTUBE_UPLOADS_PLAYLIST_ID
-  if (!apiKey || !playlistId) {
-    respond(response, 503, { error: "Configure YOUTUBE_API_KEY e YOUTUBE_UPLOADS_PLAYLIST_ID." })
+  if (!apiKey) {
+    respond(response, 503, { error: "Configure YOUTUBE_API_KEY." })
     return
   }
 
   try {
-    const endpoint = new URL("https://www.googleapis.com/youtube/v3/playlistItems")
-    endpoint.search = new URLSearchParams({
+    const youtubeUrl = new URL(links.platforms.youtube)
+    const channelHandle = decodeURIComponent(youtubeUrl.pathname.slice(1))
+    const channelEndpoint = new URL("https://www.googleapis.com/youtube/v3/channels")
+    channelEndpoint.search = new URLSearchParams({
+      part: "contentDetails,statistics",
+      forHandle: channelHandle,
+      key: apiKey,
+    }).toString()
+
+    const channelResponse = await fetch(channelEndpoint)
+    if (!channelResponse.ok) {
+      respond(response, 502, { error: "Não foi possível consultar o canal no YouTube." })
+      return
+    }
+
+    const channelData = (await channelResponse.json()) as ChannelResponse
+    const channel = channelData.items?.[0]
+    const playlistId = channel?.contentDetails?.relatedPlaylists?.uploads
+    if (!channel || !playlistId) {
+      respond(response, 502, { error: "Não foi possível localizar a playlist de uploads do canal." })
+      return
+    }
+
+    const playlistEndpoint = new URL("https://www.googleapis.com/youtube/v3/playlistItems")
+    playlistEndpoint.search = new URLSearchParams({
       part: "snippet,contentDetails",
       playlistId,
       maxResults: "50",
       key: apiKey,
     }).toString()
 
-    const youtubeResponse = await fetch(endpoint)
-    if (!youtubeResponse.ok) {
-      respond(response, 502, { error: "Não foi possível consultar a playlist no YouTube." })
+    const playlistResponse = await fetch(playlistEndpoint)
+    if (!playlistResponse.ok) {
+      respond(response, 502, { error: "Não foi possível consultar a playlist do canal no YouTube." })
       return
     }
 
-    const playlist = (await youtubeResponse.json()) as PlaylistResponse
+    const playlist = (await playlistResponse.json()) as PlaylistResponse
     const episodes: ApiEpisode[] = (playlist.items ?? [])
       .map((item) => {
         const videoId = item.contentDetails?.videoId
@@ -94,33 +118,18 @@ export default async function handler(request: IncomingMessage, response: Server
       .slice(0, 12)
       .reverse()
 
-    let stats: ChannelStats | null = null
-    const channelId = playlist.items?.[0]?.snippet?.channelId
-    if (channelId) {
-      const channelEndpoint = new URL("https://www.googleapis.com/youtube/v3/channels")
-      channelEndpoint.search = new URLSearchParams({
-        part: "statistics",
-        id: channelId,
-        key: apiKey,
-      }).toString()
-
-      const channelResponse = await fetch(channelEndpoint)
-      if (channelResponse.ok) {
-        const channel = (await channelResponse.json()) as ChannelResponse
-        const channelStatistics = channel.items?.[0]?.statistics
-        if (channelStatistics) {
-          stats = {
-            videoCount: count(channelStatistics.videoCount),
-            viewCount: count(channelStatistics.viewCount),
-            subscriberCount: channelStatistics.hiddenSubscriberCount
+    const channelStatistics = channel.statistics
+    const stats: ChannelStats | null = channelStatistics
+      ? {
+          videoCount: count(channelStatistics.videoCount),
+          viewCount: count(channelStatistics.viewCount),
+          subscriberCount: channelStatistics.hiddenSubscriberCount
+            ? null
+            : channelStatistics.subscriberCount === undefined
               ? null
-              : channelStatistics.subscriberCount === undefined
-                ? null
-                : count(channelStatistics.subscriberCount),
-          }
+              : count(channelStatistics.subscriberCount),
         }
-      }
-    }
+      : null
 
     response.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400")
     const data: YouTubeData = { episodes, stats }

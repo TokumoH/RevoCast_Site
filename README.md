@@ -115,11 +115,10 @@ domains/<domínio>/
 ### YouTube Data API na Vercel
 
 1. No Google Cloud Console, crie um projeto, ative **YouTube Data API v3** e gere uma chave de API. Restrinja a chave à YouTube Data API v3. A chave é usada apenas pela função serverless; não a coloque em variáveis com prefixo `VITE_`.
-2. Obtenha o ID da playlist de uploads do canal. Pela YouTube Data API, consulte `channels.list` com `part=contentDetails` e o ID do canal; use `contentDetails.relatedPlaylists.uploads` como valor da playlist.
-3. Na Vercel, abra **Project Settings > Environment Variables** e adicione `YOUTUBE_API_KEY` e `YOUTUBE_UPLOADS_PLAYLIST_ID` para os ambientes desejados. Depois, faça um novo deploy.
-4. A Vercel lê `vercel.json` automaticamente. Não é necessário YAML: esse projeto usa `vercel.json` para configurar o build (`npm run build`) e a saída (`dist`). A pasta `api/` é publicada como função serverless.
+2. Na Vercel, abra **Project Settings > Environment Variables** e adicione somente `YOUTUBE_API_KEY` para os ambientes desejados. O endpoint descobre o canal e a playlist de uploads pelo link do YouTube em `src/shared/config/links.ts`. Depois, faça um novo deploy.
+3. A Vercel lê `vercel.json` automaticamente. Não é necessário YAML: esse projeto usa `vercel.json` para configurar o build (`npm run build`) e a saída (`dist`). A pasta `api/` é publicada como função serverless.
 
-Para testar localmente com a função habilitada, copie `.env.example` para `.env.local`, preencha as duas variáveis e execute `npx vercel dev` (se necessário, faça `npx vercel login` e `npx vercel link` primeiro). `npm run dev` inicia apenas o Vite; nesse modo, a tela continua usando os dados de fallback. A função mantém os dados em cache por uma hora.
+Para testar localmente com a função habilitada, copie `.env.example` para `.env.local`, preencha `YOUTUBE_API_KEY` e execute `npx vercel dev` (se necessário, faça `npx vercel login` e `npx vercel link` primeiro). `npm run dev` inicia apenas o Vite; nesse modo, a tela continua usando os dados de fallback. A função mantém os dados em cache por uma hora.
 
 **Manter o fallback:** edite `src/domains/episodes/fallback.ts` para ajustar tags, capas próprias e os dados usados quando a API falhar. `youtubeId` deve conter somente o ID do vídeo, sem URL ou parâmetros.
 
