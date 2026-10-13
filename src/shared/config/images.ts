@@ -24,6 +24,6 @@ export const images = {
     ep07: slot("episodes/ep7Thumbnail.jpg"),
   },
   about: {
-    team: slot(""), // foto da equipe (public/images/about/)
+    team: slot("about/equipeRevocast.jpeg"), // foto da equipe (public/images/about/)
   },
 }
