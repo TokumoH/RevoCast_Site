@@ -1,6 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
 import type { ApiEpisode, ChannelStats, YouTubeData } from "../src/domains/episodes/model"
-import { links } from "../src/shared/config/links"
+import { links } from "../src/shared/config/links.js"
 
 type PlaylistItem = {
   contentDetails?: { videoId?: string }
