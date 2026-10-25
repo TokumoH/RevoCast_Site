@@ -167,7 +167,8 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 Além da página inicial, o site tem duas páginas interativas, abertas pelos links **Nuvem** e **Votação** no canto
 direito do cabeçalho. Elas usam rotas por `#` (`#/nuvem` e `#/votacao`, definidas em `links.pages`), então funcionam
 em qualquer hospedagem estática sem configurar servidor. As páginas ficam sempre montadas em `src/app/App.tsx` e só
-são escondidas: trocar de página não apaga a nuvem nem os projetos. Recarregar o navegador zera tudo (nada é salvo).
+são escondidas ao trocar de rota. A nuvem de palavras é mantida em memória; as votações, projetos, votos e códigos
+consumidos são persistidos no `localStorage` do navegador usado pela organização.
 
 - **Nuvem de palavras** (`domains/wordcloud`): cada palavra digitada entra na nuvem; repetir aumenta o tamanho dela.
   Maiúsculas, acentos e pontuação nas pontas são ignorados (`Café`, `cafe` e `cafe!` são a mesma palavra). Um texto
@@ -179,11 +180,13 @@ são escondidas: trocar de página não apaga a nuvem nem os projetos. Recarrega
     lugar livre mais perto do centro numa espiral que começa num ângulo próprio da palavra, sem sobrepor as outras.
     Quem já está na tela fica onde está; só muda de lugar quem passa a bater em outra palavra. Se a nuvem lota, todas
     as palavras diminuem um pouco para caber. Espaço entre palavras e margens: constantes `GAP` e `INSET` em `layout.ts`.
-- **Votação** (`domains/voting`): até 10 projetos (`votingLimits.maxProjects`), cada um com imagem (logo/capa),
-  nome e botão de voto que liga e desliga, como o like do YouTube. O botão **Auditar** conta os votos e mostra o
-  gráfico de barras com o campeão (empates aparecem como "Empate no topo"). A contagem está em `audit.ts`.
-- Os votos ficam só no navegador de quem está usando a página (sem servidor), então cada pessoa vota uma vez por
-  projeto. Para somar votos de várias pessoas é preciso um servidor, como a função em `api/`.
+- **Votação** (`domains/voting`): primeiro crie uma votação e entre nela; só então cadastre até 10 projetos
+  (`votingLimits.maxProjects`), cada um com imagem (logo/capa), nome e botão de voto com código de validação.
+  Projetos não podem ser excluídos pela interface para evitar remoções acidentais; votações inteiras podem ser excluídas.
+  **Auditar resultados** gera um gráfico de barras com o projeto vencedor (empates aparecem como "Empate no topo").
+  A contagem está em `audit.ts` e a entidade agregadora `Voting` fica em `model.ts`.
+- Votações, projetos, contagem de votos e códigos consumidos ficam no `localStorage` do navegador de organização.
+  Isso se destina a uma feira presencial em um único computador; não sincroniza os votos entre computadores.
 
 **Adicionar outra página interativa:** crie o domínio, adicione a rota em `links.pages` e em `shared/router/useHashRoute.ts`,
 o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
@@ -226,13 +229,24 @@ Substitua o exemplo pelo código recebido. A conferência consulta o lote no arq
 
 ### Como o uso único funciona
 
-O site calcula o hash do código digitado, verifica se ele consta no arquivo de hashes e guarda os hashes já utilizados junto com os votos no `localStorage` do navegador. Um mesmo código não pode votar novamente nesse navegador, mesmo após atualizar a página. A cada voto válido, o total do projeto é incrementado — o botão não funciona como alternância de like.
+O site calcula o hash do código digitado e verifica se ele consta no arquivo de hashes. Os hashes utilizados ficam numa lista global no `localStorage` do navegador, compartilhada por todas as votações. Um código só pode registrar um voto no site inteiro, mesmo após atualizar a página ou entrar em outra votação. A cada voto válido, o total do projeto é incrementado — o botão não funciona como alternância de like.
 
-Os nomes, imagens, contagens de votos e códigos consumidos também ficam salvos no navegador utilizado durante a feira. Portanto:
+### Fluxo de votação
+
+1. Abra **Votação** no menu e crie uma votação com um nome, por exemplo, `Feira de Projetos 2026`.
+2. Clique em **Entrar na votação**.
+3. Adicione os projetos (até 10), preencha os nomes e, se desejar, suas imagens.
+4. Digite um código no cartão do projeto escolhido e clique em **Votar**. Depois, use **Auditar resultados** para ver a contagem.
+5. Use **Todas as votações** para voltar à lista. A organização pode excluir uma votação completa, mas não pode excluir projetos individualmente.
+
+Cada votação guarda seu próprio conjunto de projetos e votos. Os códigos consumidos ficam em uma lista global compartilhada entre as votações: o mesmo código não pode ser reutilizado ao entrar em outra votação. Excluir uma votação apaga seus projetos e resultados, mas não libera novamente os códigos já utilizados. O projeto migra automaticamente dados de uma versão anterior para uma votação chamada `Votação anterior`, quando encontra dados legados não vazios.
+
+Os nomes, imagens, contagens de votos e códigos consumidos ficam salvos no navegador utilizado durante a feira. Portanto:
 
 - Use sempre o mesmo computador e o mesmo perfil do navegador durante o evento.
 - Não utilize janela anônima e não limpe os dados do site enquanto a votação estiver em andamento.
 - Os votos não são sincronizados entre computadores nem enviados para um banco remoto. Para esta votação de um dia, mantenha o computador como ponto único de apuração.
+- A lista de códigos consumidos é global para todas as votações deste navegador. Excluir uma votação não restaura os códigos utilizados nela.
 
 ### Limites conhecidos
 

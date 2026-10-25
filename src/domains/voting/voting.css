@@ -10,8 +10,6 @@
 .project .btn { justify-content: center; }
 .project__like { width: 20px; height: 20px; color: #fff; }
 .project .btn--light .project__like { color: var(--cyan-soft); }
-.project__remove { position: absolute; top: -14px; right: -10px; z-index: 3; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; font: 400 24px/1 var(--font-display); color: var(--ink); background: var(--paper); border: 2.5px solid var(--ink); border-radius: 50%; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; transition: transform 0.15s; }
-.project__remove:hover { color: #fff; background: var(--pink); transform: rotate(8deg) scale(1.08); }
 
 /* Cartão "adicionar projeto" */
 .project-add { display: grid; gap: 12px; place-content: center; justify-items: center; min-height: 300px; padding: 20px; font: 400 22px/1.1 var(--font-display); color: var(--ink); background: transparent; border: var(--border); border-style: dashed; border-radius: var(--radius); }
@@ -48,3 +46,32 @@ button.project-add:hover { background: var(--cyan-soft); transform: rotate(-1deg
 .project__code { min-width: 0; width: 100%; }
 .project__vote-message { margin: 0; font-size: 13px; font-weight: 800; }
 .project__vote-row .btn { white-space: nowrap; }
+
+/* Gestão de votações: cada votação agrupa seus próprios projetos, votos e códigos consumidos. */
+.voting-create { display: grid; gap: 10px; max-width: 860px; margin: 0 0 36px; }
+.voting-create > label { font-weight: 800; }
+.voting-create__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 14px; }
+.voting-create__row .field { min-width: 0; }
+.voting-feedback { margin: 2px 0 0; color: #9f1239; font-weight: 800; }
+.voting-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr)); gap: 24px; }
+.voting-item { display: flex; flex-direction: column; justify-content: space-between; gap: 22px; min-width: 0; padding: 24px; }
+.voting-item__content { display: grid; justify-items: start; gap: 12px; }
+.voting-item h3, .voting-empty h3 { margin: 0; overflow-wrap: anywhere; font: 400 clamp(24px, 3vw, 34px)/1.05 var(--font-display); }
+.voting-item .note { margin: 0; }
+.voting-item__actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
+.voting-delete { padding: 8px 2px; border: 0; color: #7f1d1d; background: transparent; font: 800 14px/1.2 var(--font-body); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.voting-delete:hover { color: #be123c; }
+.voting-empty { display: grid; justify-items: start; gap: 12px; max-width: 700px; padding: clamp(22px, 4vw, 38px); }
+.voting-empty p { margin: 0; }
+.voting-session-top { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 22px; }
+.voting-back { padding: 8px 0; border: 0; color: var(--ink); background: transparent; font: 800 15px/1.2 var(--font-body); text-decoration: underline; text-underline-offset: 4px; cursor: pointer; }
+.voting-session-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: -22px 0 30px; }
+
+@media (max-width: 600px) {
+  .voting-create__row { grid-template-columns: 1fr; }
+  .voting-create__row .btn { justify-content: center; }
+  .voting-item__actions { align-items: stretch; flex-direction: column; }
+  .voting-item__actions .btn { justify-content: center; }
+  .voting-delete { align-self: flex-start; }
+}
+.voting-feedback--success { color: var(--ink); }

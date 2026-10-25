@@ -1,9 +1,17 @@
-// Projeto da votação. O total de votos é armazenado localmente neste computador.
+// Projeto pertencente a uma votação específica. Os dados ficam no navegador da organização.
 export type Project = {
   id: number
   name: string
   image: string
   votes: number
+}
+
+// Votação é a entidade principal: ela existe antes dos projetos e agrupa os projetos e seus votos.
+export type Voting = {
+  id: string
+  title: string
+  createdAt: number
+  projects: Project[]
 }
 
 // Linha do gráfico da auditoria.
