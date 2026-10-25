@@ -1,0 +1,15 @@
+.cloud__board { display: grid; min-height: 380px; padding: clamp(20px, 4vw, 44px); }
+.cloud__star { top: -22px; right: 28px; width: 52px; color: var(--pink); transform: rotate(12deg); }
+.cloud__spark { bottom: -18px; left: 30px; width: 44px; color: var(--sand); }
+.cloud { --cloud-scale: 1; display: flex; flex-wrap: wrap; align-content: center; align-items: center; justify-content: center; gap: 6px 22px; margin: 0; padding: 0; list-style: none; }
+.cloud__empty { align-self: center; justify-self: center; text-align: center; }
+.cloud__word { font: 400 calc(var(--size) * var(--cloud-scale)) / 1.05 var(--font-display); transform: rotate(var(--tilt)); }
+.cloud__word--0 { color: var(--pink); }
+.cloud__word--1 { color: var(--ink); }
+.cloud__word--2 { color: color-mix(in srgb, var(--cyan) 72%, var(--ink)); }
+.cloud__word--3 { color: color-mix(in srgb, var(--sand) 60%, var(--ink)); }
+.cloud__form { display: flex; gap: 14px; align-items: center; max-width: 640px; margin: 40px auto 0; }
+@media (max-width: 600px) {
+  .cloud { --cloud-scale: 0.7; }
+  .cloud__form { flex-direction: column; align-items: stretch; }
+}

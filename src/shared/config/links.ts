@@ -17,6 +17,11 @@ export const links = {
     whatsapp: "", // ✏️ link completo, ex.: "https://wa.me/55..."
     guestForm: "", // ✏️ link do formulário para convidados (ex.: Google Forms)
   },
+  // Páginas interativas (rotas por "#/", sem recarregar o site)
+  pages: {
+    cloud: "#/nuvem",
+    voting: "#/votacao",
+  },
   // Âncoras internas (navegação dentro da página)
   anchors: {
     top: "#topo",

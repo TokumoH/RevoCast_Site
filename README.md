@@ -25,7 +25,9 @@ Para publicar na Vercel, conecte o repositório ao projeto. O arquivo `vercel.js
 | **Links** (YouTube, Instagram, TikTok, Spotify, Amazon Music, e-mail, WhatsApp, formulário) | `src/shared/config/links.ts` |
 | **Imagens** (logo, capas de episódios, foto da equipe) | `src/shared/config/images.ts` (arquivos em `public/images/`) |
 | **Episódios** (textos da seção e fallback) | `src/domains/episodes/data.ts`, `src/domains/episodes/fallback.ts` |
-| Textos da abertura e do menu | `src/domains/brand/data.ts` |
+| Textos da abertura e do menu (e os links **Nuvem** e **Votação** do cabeçalho) | `src/domains/brand/data.ts` |
+| Textos e limites da página **Nuvem de palavras** | `src/domains/wordcloud/data.ts` |
+| Textos e limites da página **Votação** (inclui o máximo de projetos) | `src/domains/voting/data.ts` |
 | Texto "Sobre", números e selos | `src/domains/about/data.ts` |
 | Textos de "Participe" (convidados e plateia) | `src/domains/community/data.ts` |
 | Textos de "Contato" e plataformas | `src/domains/contact/data.ts` |
@@ -64,12 +66,14 @@ revocast-site/
     │   │   ├── useReveal.ts   #     detecta quando o elemento aparece na tela
     │   │   ├── Reveal.tsx     #     envolve um conteúdo para entrar com animação
     │   │   └── Float.tsx      #     faz o conteúdo flutuar
+    │   ├── router/            #   página atual lida do "#" do endereço (home, nuvem, votação)
     │   ├── styles/
     │   │   ├── tokens.css     #   cores, bordas, sombras e fontes
     │   │   └── base.css       #   reset e tipografia
     │   └── ui/                #   componentes visuais reutilizáveis
     │       ├── Sticker.tsx    #     bloco "adesivo" (borda grossa, sombra, inclinação, fita)
-    │       ├── Button.tsx     #     botão (desativa sozinho se o link estiver vazio)
+    │       ├── Button.tsx     #     botão-link (desativa sozinho se o link estiver vazio)
+    │       ├── ActionButton.tsx #   botão que executa uma ação (enviar, votar, auditar)
     │       ├── Bubble.tsx     #     balão de fala
     │       ├── ImageSlot.tsx  #     imagem ou espaço reservado se estiver vazia
     │       ├── SectionTitle.tsx #   título padrão de seção
@@ -84,7 +88,9 @@ revocast-site/
         │   └── model.ts       #   tipos de episódio e estatísticas do canal
         ├── about/             # Sobre o podcast, números e selos de respaldo
         ├── community/         # Convidados e plateia ("Participe")
-        └── contact/           # Plataformas e formas de contato
+        ├── contact/           # Plataformas e formas de contato
+        ├── wordcloud/         # Página interativa "Nuvem de palavras" (#/nuvem)
+        └── voting/            # Página interativa "Votação" com auditoria (#/votacao)
 ```
 
 Cada domínio segue o mesmo padrão:
@@ -155,6 +161,25 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 - Quem ativa "reduzir movimento" no sistema vê tudo parado (já preparado em todos os arquivos).
 
 **Mudar as cores:** edite `src/shared/styles/tokens.css`. As cores atuais vêm da logo (rosa, azul-claro e areia).
+
+## Páginas interativas (Nuvem e Votação)
+
+Além da página inicial, o site tem duas páginas interativas, abertas pelos links **Nuvem** e **Votação** no canto
+direito do cabeçalho. Elas usam rotas por `#` (`#/nuvem` e `#/votacao`, definidas em `links.pages`), então funcionam
+em qualquer hospedagem estática sem configurar servidor. As páginas ficam sempre montadas em `src/app/App.tsx` e só
+são escondidas: trocar de página não apaga a nuvem nem os projetos. Recarregar o navegador zera tudo (nada é salvo).
+
+- **Nuvem de palavras** (`domains/wordcloud`): cada palavra digitada entra na nuvem; repetir aumenta o tamanho dela.
+  Maiúsculas, acentos e pontuação nas pontas são ignorados (`Café`, `cafe` e `cafe!` são a mesma palavra). Um texto
+  com várias palavras separadas por espaço adiciona cada uma. Tamanhos em `data.ts` (`cloudSize`); regras em `words.ts`.
+- **Votação** (`domains/voting`): até 10 projetos (`votingLimits.maxProjects`), cada um com imagem (logo/capa),
+  nome e botão de voto que liga e desliga, como o like do YouTube. O botão **Auditar** conta os votos e mostra o
+  gráfico de barras com o campeão (empates aparecem como "Empate no topo"). A contagem está em `audit.ts`.
+- Os votos ficam só no navegador de quem está usando a página (sem servidor), então cada pessoa vota uma vez por
+  projeto. Para somar votos de várias pessoas é preciso um servidor, como a função em `api/`.
+
+**Adicionar outra página interativa:** crie o domínio, adicione a rota em `links.pages` e em `shared/router/useHashRoute.ts`,
+o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
 
 ## Pendências conhecidas
 
