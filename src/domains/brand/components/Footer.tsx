@@ -1,10 +1,18 @@
 import { images } from "@/shared/config/images"
 import { links } from "@/shared/config/links"
 import { site } from "@/shared/config/site"
+import { useHashRoute } from "@/shared/router"
 import { footerNote } from "../data"
 import "../brand.css"
 
 export default function Footer() {
+  const route = useHashRoute()
+  // Nas páginas interativas, só rola até o topo (sem voltar para a página inicial).
+  const toTop = (e: React.MouseEvent) => {
+    if (route === "home") return
+    e.preventDefault()
+    window.scrollTo({ top: 0 })
+  }
   return (
     <footer className="footer">
       <div className="container footer__inner">
@@ -14,7 +22,9 @@ export default function Footer() {
           <br />
           {footerNote}
         </p>
-        <a href={links.anchors.top}>Voltar ao topo ↑</a>
+        <a href={links.anchors.top} onClick={toTop}>
+          Voltar ao topo ↑
+        </a>
       </div>
     </footer>
   )

@@ -1,0 +1,29 @@
+// ✏️ Textos e limites da página "Votação".
+export const votingCopy = {
+  eyebrow: "Votação",
+  title: "Quem leva a taça?",
+  note: "cada voto usa um código único; os resultados ficam salvos neste navegador",
+  empty: "Nenhum projeto ainda. Adicione o primeiro!",
+  addLabel: "Adicionar projeto",
+  full: "Limite de projetos atingido",
+  imageLabel: "Clique para adicionar a logo ou capa",
+  imageAlt: "Logo ou capa do projeto",
+  namePlaceholder: "Nome do projeto",
+  nameLabel: "Nome do projeto",
+  vote: "Votar",
+  remove: "Remover projeto",
+  audit: "Auditar",
+  auditTitle: "Resultado da auditoria",
+  chartLabel: "Gráfico de votos por projeto",
+  champion: "Campeão da votação",
+  tie: "Empate no topo",
+  noVotes: "Ninguém votou ainda. Vote em algum projeto e audite de novo.",
+}
+
+export const votingLimits = {
+  maxProjects: 10,
+  nameMax: 40,
+}
+
+export const projectLabel = (name: string, index: number) => name.trim() || `Projeto ${index + 1}`
+export const votesLabel = (n: number) => `${n} ${n === 1 ? "voto" : "votos"}`

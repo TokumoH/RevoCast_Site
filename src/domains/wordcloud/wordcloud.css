@@ -1,0 +1,32 @@
+/* A página inteira cabe na janela: título, nuvem (que ocupa o espaço que sobra) e caixa de texto */
+.cloud-page { display: flex; height: calc(100svh - var(--header-h)); min-height: 520px; padding-block: 20px 24px; }
+.cloud-page__inner { display: flex; flex-direction: column; gap: 14px; min-height: 0; }
+.cloud-page .section-title { gap: 6px; margin-bottom: 4px; }
+.cloud-page h2 { font-size: clamp(28px, 6vh, 48px); }
+
+.cloud__board { display: flex; flex: 1; min-height: 0; padding: 12px; }
+.cloud__star { top: -22px; right: 28px; width: 52px; color: var(--pink); transform: rotate(12deg); }
+.cloud__spark { bottom: -18px; left: 30px; width: 44px; color: var(--sand); }
+.cloud { position: relative; flex: 1; min-width: 0; }
+.cloud__empty { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; }
+.cloud__list { margin: 0; padding: 0; list-style: none; }
+
+/* Palavra: posicionada pelo centro (left/top vêm do layout) */
+.cloud__word { position: absolute; width: max-content; font: 400 var(--size) / 1.05 var(--font-display); white-space: nowrap; transform: translate(-50%, -50%) rotate(var(--tilt)); transition: left 0.5s ease, top 0.5s ease, font-size 0.3s ease; }
+.cloud__word:hover, .cloud__word:focus-within { z-index: 5; }
+.cloud__word--0 { color: var(--pink); }
+.cloud__word--1 { color: var(--ink); }
+.cloud__word--2 { color: color-mix(in srgb, var(--cyan) 72%, var(--ink)); }
+.cloud__word--3 { color: color-mix(in srgb, var(--sand) 60%, var(--ink)); }
+
+/* Contador e botão de excluir: aparecem em cima da palavra ao passar o mouse (ou tocar) */
+.cloud__tools { position: absolute; bottom: 100%; left: 50%; display: flex; align-items: center; gap: 6px; padding-bottom: 4px; transform: translateX(-50%); opacity: 0; pointer-events: none; transition: opacity 0.15s; }
+.cloud__word:hover .cloud__tools, .cloud__word:focus-within .cloud__tools { opacity: 1; pointer-events: auto; }
+.cloud__tools .chip { white-space: nowrap; box-shadow: 2px 2px 0 var(--ink); }
+.cloud__remove { display: grid; place-items: center; width: 28px; height: 28px; padding: 0; font: 400 20px/1 var(--font-display); color: var(--ink); background: var(--paper); border: 2.5px solid var(--ink); border-radius: 50%; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; transition: transform 0.15s; }
+.cloud__remove:hover { color: #fff; background: var(--pink); transform: rotate(8deg) scale(1.08); }
+
+.cloud__form { display: flex; gap: 14px; align-items: center; width: 100%; max-width: 640px; margin-inline: auto; }
+@media (max-width: 600px) {
+  .cloud__form { gap: 10px; }
+}

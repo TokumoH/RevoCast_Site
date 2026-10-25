@@ -1,0 +1,50 @@
+.voting__grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 40px 34px; }
+.voting__empty { margin-top: 18px; text-align: center; }
+
+/* Cartão de projeto */
+.project { display: grid; gap: 14px; justify-items: stretch; padding: 18px; }
+.project__image { display: block; aspect-ratio: 1 / 1; overflow: hidden; cursor: pointer; background: #fff; border: var(--border); border-radius: 14px; }
+.project__image:focus-within { outline: 3px solid var(--cyan); outline-offset: 3px; }
+.project__image .image-slot { border-radius: 0; }
+.project__image .image-slot--empty span { max-width: 80%; line-height: 1.4; text-align: center; }
+.project .btn { justify-content: center; }
+.project__like { width: 20px; height: 20px; color: #fff; }
+.project .btn--light .project__like { color: var(--cyan-soft); }
+.project__remove { position: absolute; top: -14px; right: -10px; z-index: 3; display: grid; place-items: center; width: 34px; height: 34px; padding: 0; font: 400 24px/1 var(--font-display); color: var(--ink); background: var(--paper); border: 2.5px solid var(--ink); border-radius: 50%; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; transition: transform 0.15s; }
+.project__remove:hover { color: #fff; background: var(--pink); transform: rotate(8deg) scale(1.08); }
+
+/* Cartão "adicionar projeto" */
+.project-add { display: grid; gap: 12px; place-content: center; justify-items: center; min-height: 300px; padding: 20px; font: 400 22px/1.1 var(--font-display); color: var(--ink); background: transparent; border: var(--border); border-style: dashed; border-radius: var(--radius); }
+button.project-add { cursor: pointer; transition: background 0.15s, transform 0.15s; }
+button.project-add:hover { background: var(--cyan-soft); transform: rotate(-1deg); }
+.project-add__plus { display: grid; place-items: center; width: 64px; height: 64px; font: 400 44px/1 var(--font-display); color: #fff; background: var(--pink); border: var(--border); border-radius: 50%; box-shadow: 3px 3px 0 var(--ink); }
+.project-add--full { text-align: center; }
+
+/* Auditoria */
+.voting__audit { display: grid; justify-items: center; gap: 36px; margin-top: 56px; }
+.voting__result { width: 100%; max-width: 760px; }
+.audit { display: grid; gap: 18px; padding: clamp(22px, 4vw, 38px); }
+.audit h3 { font-size: 32px; }
+.audit__winner { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; font-size: 19px; }
+.audit__winner strong { font: 400 28px/1 var(--font-display); }
+.audit__star { width: 34px; height: 34px; color: var(--pink); }
+.audit__chart { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.audit__row { display: grid; grid-template-columns: minmax(70px, 28%) 1fr 28px; align-items: center; gap: 12px; font-weight: 800; }
+.audit__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.audit__track { display: block; height: 30px; background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; }
+.audit__fill { display: block; height: 100%; background: var(--cyan); border: 2.5px solid var(--ink); border-radius: 999px; }
+.audit__row.is-champion .audit__fill { background: var(--pink); }
+.audit__value { font: 400 22px/1 var(--font-display); text-align: right; }
+.audit__total { justify-self: end; }
+@media (max-width: 600px) {
+  .voting__grid { grid-template-columns: 1fr; }
+  .audit__row { grid-template-columns: 1fr 28px; }
+  .audit__label { grid-column: 1 / -1; }
+}
+
+.project__vote { display: grid; gap: 7px; }
+.project__code-label { font-size: 13px; font-weight: 800; }
+.project__vote-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 8px; }
+.project__code { min-width: 0; width: 100%; }
+.project__vote-message { margin: 0; font-size: 13px; font-weight: 800; }
+.project__vote-row .btn { white-space: nowrap; }

@@ -1,4 +1,5 @@
 import { links } from "@/shared/config/links"
+import type { Route } from "@/shared/router"
 
 // ✏️ Textos do cabeçalho, da abertura (hero) e do rodapé.
 export const nav = [
@@ -6,6 +7,12 @@ export const nav = [
   { label: "Sobre", href: links.anchors.about },
   { label: "Participe", href: links.anchors.join },
   { label: "Contato", href: links.anchors.contact },
+]
+
+// ✏️ Páginas interativas (canto direito do cabeçalho)
+export const pageNav: { label: string; href: string; route: Route }[] = [
+  { label: "Nuvem", href: links.pages.cloud, route: "cloud" },
+  { label: "Votação", href: links.pages.voting, route: "voting" },
 ]
 
 export const hero = {

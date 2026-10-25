@@ -25,7 +25,9 @@ Para publicar na Vercel, conecte o repositório ao projeto. O arquivo `vercel.js
 | **Links** (YouTube, Instagram, TikTok, Spotify, Amazon Music, e-mail, WhatsApp, formulário) | `src/shared/config/links.ts` |
 | **Imagens** (logo, capas de episódios, foto da equipe) | `src/shared/config/images.ts` (arquivos em `public/images/`) |
 | **Episódios** (textos da seção e fallback) | `src/domains/episodes/data.ts`, `src/domains/episodes/fallback.ts` |
-| Textos da abertura e do menu | `src/domains/brand/data.ts` |
+| Textos da abertura e do menu (e os links **Nuvem** e **Votação** do cabeçalho) | `src/domains/brand/data.ts` |
+| Textos e limites da página **Nuvem de palavras** | `src/domains/wordcloud/data.ts` |
+| Textos e limites da página **Votação** (inclui o máximo de projetos) | `src/domains/voting/data.ts` |
 | Texto "Sobre", números e selos | `src/domains/about/data.ts` |
 | Textos de "Participe" (convidados e plateia) | `src/domains/community/data.ts` |
 | Textos de "Contato" e plataformas | `src/domains/contact/data.ts` |
@@ -64,12 +66,14 @@ revocast-site/
     │   │   ├── useReveal.ts   #     detecta quando o elemento aparece na tela
     │   │   ├── Reveal.tsx     #     envolve um conteúdo para entrar com animação
     │   │   └── Float.tsx      #     faz o conteúdo flutuar
+    │   ├── router/            #   página atual lida do "#" do endereço (home, nuvem, votação)
     │   ├── styles/
     │   │   ├── tokens.css     #   cores, bordas, sombras e fontes
     │   │   └── base.css       #   reset e tipografia
     │   └── ui/                #   componentes visuais reutilizáveis
     │       ├── Sticker.tsx    #     bloco "adesivo" (borda grossa, sombra, inclinação, fita)
-    │       ├── Button.tsx     #     botão (desativa sozinho se o link estiver vazio)
+    │       ├── Button.tsx     #     botão-link (desativa sozinho se o link estiver vazio)
+    │       ├── ActionButton.tsx #   botão que executa uma ação (enviar, votar, auditar)
     │       ├── Bubble.tsx     #     balão de fala
     │       ├── ImageSlot.tsx  #     imagem ou espaço reservado se estiver vazia
     │       ├── SectionTitle.tsx #   título padrão de seção
@@ -84,7 +88,9 @@ revocast-site/
         │   └── model.ts       #   tipos de episódio e estatísticas do canal
         ├── about/             # Sobre o podcast, números e selos de respaldo
         ├── community/         # Convidados e plateia ("Participe")
-        └── contact/           # Plataformas e formas de contato
+        ├── contact/           # Plataformas e formas de contato
+        ├── wordcloud/         # Página interativa "Nuvem de palavras" (#/nuvem)
+        └── voting/            # Página interativa "Votação" com auditoria (#/votacao)
 ```
 
 Cada domínio segue o mesmo padrão:
@@ -156,8 +162,79 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 
 **Mudar as cores:** edite `src/shared/styles/tokens.css`. As cores atuais vêm da logo (rosa, azul-claro e areia).
 
+## Páginas interativas (Nuvem e Votação)
+
+Além da página inicial, o site tem duas páginas interativas, abertas pelos links **Nuvem** e **Votação** no canto
+direito do cabeçalho. Elas usam rotas por `#` (`#/nuvem` e `#/votacao`, definidas em `links.pages`), então funcionam
+em qualquer hospedagem estática sem configurar servidor. As páginas ficam sempre montadas em `src/app/App.tsx` e só
+são escondidas: trocar de página não apaga a nuvem nem os projetos. Recarregar o navegador zera tudo (nada é salvo).
+
+- **Nuvem de palavras** (`domains/wordcloud`): cada palavra digitada entra na nuvem; repetir aumenta o tamanho dela.
+  Maiúsculas, acentos e pontuação nas pontas são ignorados (`Café`, `cafe` e `cafe!` são a mesma palavra). Um texto
+  com várias palavras separadas por espaço adiciona cada uma. A página cabe inteira na janela (título, nuvem e caixa
+  de texto, sem rolar; veja `.cloud-page` em `wordcloud.css`). Ao passar o mouse (ou tocar) numa palavra aparecem
+  quantas vezes ela foi digitada e o botão **×** para excluí-la. Tamanhos em `data.ts` (`cloudSize`); regras de texto
+  em `words.ts`.
+  - **Posição das palavras** (`layout.ts` + `useCloudLayout.ts`): a primeira vai para o meio e cada nova procura o
+    lugar livre mais perto do centro numa espiral que começa num ângulo próprio da palavra, sem sobrepor as outras.
+    Quem já está na tela fica onde está; só muda de lugar quem passa a bater em outra palavra. Se a nuvem lota, todas
+    as palavras diminuem um pouco para caber. Espaço entre palavras e margens: constantes `GAP` e `INSET` em `layout.ts`.
+- **Votação** (`domains/voting`): até 10 projetos (`votingLimits.maxProjects`), cada um com imagem (logo/capa),
+  nome e botão de voto que liga e desliga, como o like do YouTube. O botão **Auditar** conta os votos e mostra o
+  gráfico de barras com o campeão (empates aparecem como "Empate no topo"). A contagem está em `audit.ts`.
+- Os votos ficam só no navegador de quem está usando a página (sem servidor), então cada pessoa vota uma vez por
+  projeto. Para somar votos de várias pessoas é preciso um servidor, como a função em `api/`.
+
+**Adicionar outra página interativa:** crie o domínio, adicione a rota em `links.pages` e em `shared/router/useHashRoute.ts`,
+o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
+
 ## Pendências conhecidas
 
 - `links.platforms.amazonMusic`, `links.contact.whatsapp` e `links.contact.guestForm` ainda podem ser preenchidos conforme os links estiverem disponíveis.
 - A foto da equipe ainda é conteúdo editável localmente. As estatísticas são totais do canal e podem incluir vídeos que não sejam episódios do podcast.
 - Sem as variáveis da API ou quando a consulta falha, a seção de episódios usa `src/domains/episodes/fallback.ts`.
+
+## Votação presencial com códigos (sem serviço externo)
+
+A votação foi simplificada para uma feira presencial de um dia, com **um único computador e navegador**. Não exige Redis, cadastro de usuário, login, segredo de servidor ou configuração de API externa.
+
+### Preparar os códigos antes da feira
+
+Na raiz do projeto, execute:
+
+```bash
+# Gere 100 códigos para distribuir (pode escolher de 1 a 5000)
+npm run vote-codes -- generate 100
+```
+
+O comando cria dois arquivos:
+
+- `private/vote-codes.txt`: os códigos em texto puro para a organização imprimir ou distribuir. **Não publique nem envie esse arquivo ao site.** A pasta `private/` fica fora do Git.
+- `public/vote-code-hashes.json`: somente os hashes dos códigos, usados pelo site para validar a digitação sem publicar a lista original em texto puro.
+
+Depois de gerar o lote, publique/republique o site normalmente para que o arquivo de hashes vá junto com a aplicação. Gere o lote **antes de iniciar a votação** e não execute o gerador novamente no meio da feira, porque isso substitui a lista de códigos aceitos. Distribua um código por participante.
+
+### Conferir um código no terminal
+
+Para conferir se um código faz parte do lote gerado:
+
+```bash
+npm run vote-codes -- validate RV-ABCD-2345
+```
+
+Substitua o exemplo pelo código recebido. A conferência consulta o lote no arquivo `public/vote-code-hashes.json`; ela confirma que o código pertence ao lote, mas não revela se ele já foi usado pelo navegador.
+
+### Como o uso único funciona
+
+O site calcula o hash do código digitado, verifica se ele consta no arquivo de hashes e guarda os hashes já utilizados junto com os votos no `localStorage` do navegador. Um mesmo código não pode votar novamente nesse navegador, mesmo após atualizar a página. A cada voto válido, o total do projeto é incrementado — o botão não funciona como alternância de like.
+
+Os nomes, imagens, contagens de votos e códigos consumidos também ficam salvos no navegador utilizado durante a feira. Portanto:
+
+- Use sempre o mesmo computador e o mesmo perfil do navegador durante o evento.
+- Não utilize janela anônima e não limpe os dados do site enquanto a votação estiver em andamento.
+- Os votos não são sincronizados entre computadores nem enviados para um banco remoto. Para esta votação de um dia, mantenha o computador como ponto único de apuração.
+
+### Limites conhecidos
+
+Esta é uma barreira simples contra a reutilização acidental de códigos, não um sistema antifraude robusto. Como a validação acontece no navegador e os resultados ficam no armazenamento local, alguém com conhecimento técnico e acesso ao computador pode alterar os dados do navegador; limpar os dados do site também apagará a apuração. Os hashes evitam publicar os códigos em texto puro, mas não transformam o site em uma votação inviolável. Para uma competição informal de feira, com a organização controlando a distribuição dos códigos e mantendo o computador sob supervisão, essa solução evita a infraestrutura adicional.
+

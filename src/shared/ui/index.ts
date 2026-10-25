@@ -1,3 +1,4 @@
+export { default as ActionButton } from "./ActionButton"
 export { default as Button } from "./Button"
 export { default as Bubble } from "./Bubble"
 export { default as ImageSlot } from "./ImageSlot"
