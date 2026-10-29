@@ -17,7 +17,7 @@ export type ChannelStats = {
   subscriberCount: number | null
 }
 
-export type YouTubeData = {
+export type ChannelData = {
   episodes: ApiEpisode[]
   stats: ChannelStats | null
 }

@@ -2,7 +2,7 @@ import { images } from "@/shared/config/images"
 import { links } from "@/shared/config/links"
 import { site } from "@/shared/config/site"
 import { useHashRoute } from "@/shared/router"
-import { footerNote } from "../data"
+import { brandCopy } from "../content"
 import "../brand.css"
 
 export default function Footer() {
@@ -20,7 +20,7 @@ export default function Footer() {
         <p>
           © {site.year} {site.name} · {site.org} · {site.school}
           <br />
-          {footerNote}
+          {brandCopy.footerNote}
         </p>
         <a href={links.anchors.top} onClick={toTop}>
           Voltar ao topo ↑

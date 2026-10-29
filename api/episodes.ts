@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
-import type { ApiEpisode, ChannelStats, YouTubeData } from "../src/domains/episodes/model"
+import type { ApiEpisode, ChannelStats, ChannelData } from "../src/domains/episodes/model"
 import { links } from "../src/shared/config/links.js"
 
 type PlaylistItem = {
@@ -174,7 +174,7 @@ export default async function handler(request: IncomingMessage, response: Server
       : null
 
     response.setHeader("Cache-Control", "public, s-maxage=3600, stale-while-revalidate=86400")
-    const data: YouTubeData = { episodes, stats }
+    const data: ChannelData = { episodes, stats }
     respond(response, 200, data)
   } catch {
     respond(response, 502, { error: "Erro ao carregar episódios do YouTube." })

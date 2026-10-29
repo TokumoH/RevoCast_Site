@@ -1,12 +1,12 @@
 import { images } from "@/shared/config/images"
 import { links, anchorId } from "@/shared/config/links"
-import { useYouTubeData } from "@/domains/episodes"
+import { useChannelData } from "@/domains/episodes"
 import { ImageSlot, SectionTitle, Sticker } from "@/shared/ui"
-import { aboutCopy, badges, stats } from "../data"
+import { aboutCopy, badges, stats } from "../content"
 import "../about.css"
 
 export default function AboutSection() {
-  const { stats: channelStats } = useYouTubeData()
+  const { stats: channelStats } = useChannelData()
 
   return (
     <section className="section about" id={anchorId(links.anchors.about)}>

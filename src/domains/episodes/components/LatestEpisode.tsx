@@ -2,7 +2,7 @@ import { links } from "@/shared/config/links"
 import { ImageSlot, Sticker } from "@/shared/ui"
 import type { Episode } from "../model"
 import { thumbnailUrl, watchUrl } from "../youtube"
-import { episodesCopy } from "../data"
+import { episodesCopy } from "../content"
 
 export default function LatestEpisode({ episode }: { episode: Episode }) {
   const cover = episode.thumbnail || thumbnailUrl(episode.youtubeId)

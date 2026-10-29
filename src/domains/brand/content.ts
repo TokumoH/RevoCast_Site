@@ -1,0 +1,35 @@
+import { links } from "@/shared/config/links"
+import type { Route } from "@/shared/router"
+
+type PageLink = { label: string; href: string; route: Route }
+
+// ✏️ Textos da identidade do site: cabeçalho, abertura (hero), faixa de temas e rodapé.
+export const brandCopy = {
+  // Menu principal (âncoras da home + página Equipe, sempre por último)
+  nav: [
+    { label: "Episódios", href: links.anchors.episodes },
+    { label: "Sobre", href: links.anchors.about },
+    { label: "Participe", href: links.anchors.join },
+    { label: "Contato", href: links.anchors.contact },
+    { label: "Equipe", href: links.pages.team },
+  ],
+  // Páginas interativas (canto direito do cabeçalho)
+  pageNav: [
+    { label: "Nuvem", href: links.pages.cloud, route: "cloud" },
+    { label: "Votação", href: links.pages.voting, route: "voting" },
+  ] as PageLink[],
+  hero: {
+    title: "Papo sério,",
+    highlight: "risada garantida.",
+    text: "O RevoCast é o podcast da Atlética Revoada que leva conhecimento sobre faculdade, projetos e saberes para a conversa, de um jeito leve, com diversão e muito humor.",
+    cta: "Assistir no YouTube",
+    ctaSecondary: "Ver episódios",
+    listenLabel: "ouça e siga também:",
+    // ✏️ Frases que se alternam no balão do mascote (a primeira aparece antes)
+    bubblePhrases: ["Bora trocar ideia?", "Tem café?", "Sem script, só papo!", "Qual é o assunto de hoje?"],
+    logoAlt: "Logo do RevoCast: um pombo musculoso de óculos falando ao microfone",
+  },
+  // ✏️ Temas da faixa que corre entre o topo e os episódios
+  tickerThemes: ["Faculdade", "Projetos", "Saberes", "Humor"],
+  footerNote: "Um podcast da Atlética Revoada, feito por estudantes.",
+}

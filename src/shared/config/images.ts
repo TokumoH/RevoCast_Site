@@ -15,20 +15,20 @@ export const images = {
   episodes: {
     // Capa personalizada de cada episódio (public/images/episodes/).
     // Vazia = usa a miniatura do YouTube (se o episódio tiver youtubeId).
-    ep01: slot("episodes/ep1Thumbnail.jpg"), // ex.: slot("episodes/ep01.jpg")
-    ep02: slot("episodes/ep2Thumbnail.jpg"),
-    ep03: slot("episodes/ep3Thumbnail.jpg"),
-    ep04: slot("episodes/ep4Thumbnail.jpg"),
-    ep05: slot("episodes/ep5Thumbnail.jpg"),
-    ep06: slot("episodes/ep6Thumbnail.jpg"),
-    ep07: slot("episodes/ep7Thumbnail.jpg"),
+    ep01: slot("episodes/ep01.jpg"), // padrão de nome: epNN.jpg
+    ep02: slot("episodes/ep02.jpg"),
+    ep03: slot("episodes/ep03.jpg"),
+    ep04: slot("episodes/ep04.jpg"),
+    ep05: slot("episodes/ep05.jpg"),
+    ep06: slot("episodes/ep06.jpg"),
+    ep07: slot("episodes/ep07.jpg"),
   },
   about: {
-    team: slot("about/equipeRevocast.jpeg"), // foto da equipe (public/images/about/)
+    team: slot("about/equipe-revocast.jpeg"), // foto da equipe (public/images/about/)
   },
   team: {
-    group: slot("team/equipeToda.jpeg"), // foto de TODA a equipe, no topo da página Equipe (public/images/team/)
-    sticker: slot("team/stickers/placeholder.svg"), // sticker padrão dos cartões (public/images/team/stickers/)
+    group: slot("team/equipe-toda.jpeg"), // foto de TODA a equipe, no topo da página Equipe (public/images/team/)
+    decal: slot("team/decals/placeholder.svg"), // decal (adesivo) padrão dos cartões (public/images/team/decals/)
   },
 }
 
@@ -40,7 +40,7 @@ export const images = {
 export const teamPhoto = (file: string) => slot(file ? `team/${file}` : "")
 
 /**
- * Sticker (adesivo) de um integrante, no canto do cartão: informe só o NOME DO ARQUIVO guardado em
- * public/images/team/stickers/. Ex.: teamSticker("ana.png"). Quem não tem sticker próprio usa images.team.sticker.
+ * Decal (adesivo decorativo) de um integrante, no canto do cartão: informe só o NOME DO ARQUIVO guardado em
+ * public/images/team/decals/. Ex.: teamDecal("ana.png"). Quem não tem decal próprio usa images.team.decal.
  */
-export const teamSticker = (file: string) => slot(file ? `team/stickers/${file}` : "")
+export const teamDecal = (file: string) => slot(file ? `team/decals/${file}` : "")

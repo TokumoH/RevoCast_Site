@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { ActionButton, ImageSlot, Sticker } from "@/shared/ui"
-import { projectLabel, votingCopy, votingLimits } from "../data"
+import { projectLabel, votingCopy, votingLimits } from "../content"
 import type { Project } from "../model"
 
 type Props = {

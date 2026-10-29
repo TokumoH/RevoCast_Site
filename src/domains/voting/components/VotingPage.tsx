@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react"
 import { ActionButton, SectionTitle, Sticker } from "@/shared/ui"
-import { votingCopy, votingLimits, votesLabel } from "../data"
+import { votingCopy, votingLimits, votesLabel } from "../content"
 import { audit } from "../audit"
 import { useVotings } from "../useVotings"
 import AuditChart from "./AuditChart"

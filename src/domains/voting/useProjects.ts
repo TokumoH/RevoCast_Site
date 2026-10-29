@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from "react"
 import { audit } from "./audit"
-import { votingLimits } from "./data"
+import { votingLimits } from "./content"
 import type { Project } from "./model"
 
 type VotingState = { projects: Project[]; usedCodes: string[] }

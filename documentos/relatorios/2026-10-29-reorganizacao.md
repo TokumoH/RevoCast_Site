@@ -36,10 +36,10 @@ Arrumar a arquitetura do diretório `revocast-site`, mantendo a organização DD
 
 ## Observações e próximos passos sugeridos
 
-- **`team.css` (alteração pendente do usuário):** `.member` recebeu `justify-self: end` e
+- ✅ *Resolvido em [2026-10-29-equipe-perfis-e-cartoes](2026-10-29-equipe-perfis-e-cartoes.md).* **`team.css` (alteração pendente do usuário):** `.member` recebeu `justify-self: end` e
   `grid-template-columns: minmax(0, 300px)` em formatação quebrada; `justify-self: end` tende a desalinhar os
   cartões para a direita dentro de cada coluna. Revisar antes de commitar.
-- **Links da equipe em `shared/`:** `links.team` (LinkedIn/GitHub por integrante) é dado do domínio `team`, não
+- ✅ *Resolvido em [2026-10-29-equipe-perfis-e-cartoes](2026-10-29-equipe-perfis-e-cartoes.md).* **Links da equipe em `shared/`:** `links.team` (LinkedIn/GitHub por integrante) é dado do domínio `team`, não
   configuração transversal. Sugestão: mover para `domains/team/data.ts` (ou um campo `links` em `Member`).
 - **Artefatos fora do Git:** `dist/` (regerado no build) e `../revocast-site-equipe-v2.zip` (cópia da versão React)
   podem ser apagados quando o usuário confirmar.

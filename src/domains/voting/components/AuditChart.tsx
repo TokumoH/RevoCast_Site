@@ -1,6 +1,6 @@
 import type { CSSProperties } from "react"
 import { Star, Sticker } from "@/shared/ui"
-import { votesLabel, votingCopy } from "../data"
+import { votesLabel, votingCopy } from "../content"
 import type { AuditResult } from "../model"
 
 // Resultado da auditoria: aviso do campeão e gráfico de barras com os votos de cada projeto.

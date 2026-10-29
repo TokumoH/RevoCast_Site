@@ -2,8 +2,8 @@ import { images } from "@/shared/config/images"
 import { links } from "@/shared/config/links"
 import { site } from "@/shared/config/site"
 import { useHashRoute } from "@/shared/router"
-import { Button } from "@/shared/ui"
-import { nav, pageNav } from "../data"
+import { LinkButton } from "@/shared/ui"
+import { brandCopy } from "../content"
 import "../brand.css"
 
 export default function Header() {
@@ -16,7 +16,7 @@ export default function Header() {
           <span>{site.name}</span>
         </a>
         <nav className="header__nav" aria-label="Principal">
-          {nav.map((item) => (
+          {brandCopy.nav.map((item) => (
             <a key={item.label} href={item.href}>
               {item.label}
             </a>
@@ -24,7 +24,7 @@ export default function Header() {
         </nav>
         <div className="header__side">
           <nav className="header__pages" aria-label="Páginas interativas">
-            {pageNav.map((item) => {
+            {brandCopy.pageNav.map((item) => {
               const active = route === item.route
               return (
                 <a key={item.label} className={`chip ${active ? "chip--pink" : "chip--cyan"}`} href={item.href} aria-current={active ? "page" : undefined}>
@@ -33,9 +33,9 @@ export default function Header() {
               )
             })}
           </nav>
-          <Button href={links.platforms.youtube} size="sm">
+          <LinkButton href={links.platforms.youtube} size="sm">
             Assistir
-          </Button>
+          </LinkButton>
         </div>
       </div>
     </header>

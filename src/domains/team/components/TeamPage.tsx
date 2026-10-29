@@ -1,8 +1,7 @@
-import { ThemeTicker } from "@/domains/brand"
 import { images } from "@/shared/config/images"
 import { Float, Reveal } from "@/shared/motion"
-import { ImageSlot, SectionTitle, Spark, Squiggle, Star, Sticker } from "@/shared/ui"
-import { members, teamCopy, teamTicker } from "../data"
+import { ImageSlot, SectionTitle, Spark, Squiggle, Star, Sticker, Ticker } from "@/shared/ui"
+import { members, teamCopy, teamTicker } from "../content"
 import MemberCard from "./MemberCard"
 import "../team.css"
 
@@ -39,7 +38,7 @@ export default function TeamPage() {
         </div>
       </section>
 
-      <ThemeTicker themes={teamTicker} />
+      <Ticker items={teamTicker} />
 
       <section className="section members">
         <div className="container">

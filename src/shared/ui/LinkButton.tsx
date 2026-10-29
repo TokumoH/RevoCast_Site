@@ -7,7 +7,8 @@ type Props = {
   children: ReactNode
 }
 
-export default function Button({ href, variant = "primary", size = "md", children }: Props) {
+// Botão que é um link (abre um endereço). Para executar uma ação, use ActionButton.
+export default function LinkButton({ href, variant = "primary", size = "md", children }: Props) {
   const cls = `btn btn--${variant} btn--${size}`
   if (!href) {
     return (

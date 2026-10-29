@@ -1,4 +1,4 @@
-import { projectLabel } from "./data"
+import { projectLabel } from "./content"
 import type { AuditResult, Project } from "./model"
 
 // Conta os votos e monta o ranking. Empates ficam todos como campeões.

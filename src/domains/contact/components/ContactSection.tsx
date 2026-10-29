@@ -1,6 +1,6 @@
 import { links, anchorId } from "@/shared/config/links"
-import { Button, SectionTitle, Spark, Sticker } from "@/shared/ui"
-import { contactCopy, directContacts } from "../data"
+import { LinkButton, SectionTitle, Spark, Sticker } from "@/shared/ui"
+import { contactCopy, directContacts } from "../content"
 import PlatformChips from "./PlatformChips"
 import "../contact.css"
 
@@ -16,9 +16,9 @@ export default function ContactSection() {
           {directContacts.length > 0 && (
             <div className="contact__direct">
               {directContacts.map((c) => (
-                <Button key={c.label} href={c.href} variant="light">
+                <LinkButton key={c.label} href={c.href} variant="light">
                   {c.label}
-                </Button>
+                </LinkButton>
               ))}
             </div>
           )}

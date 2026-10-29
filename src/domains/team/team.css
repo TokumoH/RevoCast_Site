@@ -22,26 +22,42 @@
 /* Integrantes: a grade se ajusta sozinha ao número de pessoas e centraliza a última linha */
 .members { padding-top: 40px; }
 .members__grid { --cols: 4; --gap: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 40px var(--gap); margin: 0; padding: 0; list-style: none; }
-.members__grid > li { flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
+/* Cada <li> tem largura fixa (--cols por linha) e estica até a altura do maior da linha (flex: stretch). */
+.members__grid > li { display: flex; flex: 0 0 calc((100% - (var(--cols) - 1) * var(--gap)) / var(--cols)); min-width: 0; }
 
-.member { display: grid; justify-items: start; gap: 10px; padding: 14px 14px 20px; }
+/* Cartões de mesmo tamanho: o cartão ocupa o <li> inteiro e cada bloco de texto reserva um espaço fixo
+   (--name-lines linhas para o nome, --tagline-lines para a frase), então nomes longos não mudam o tamanho.
+   container-type permite que o texto e os botões se ajustem à LARGURA DO CARTÃO (unidade cqi), não da janela. */
+.member { container-type: inline-size; --name-lines: 2; --tagline-lines: 2; display: grid; grid-template-columns: minmax(0, 1fr); align-content: start; justify-items: start; gap: 10px; width: 100%; padding: 14px 14px 20px; }
 .member__photo { width: 100%; aspect-ratio: 4 / 5; overflow: hidden; border: var(--border); border-radius: 14px; background: var(--paper); }
 .member__photo .image-slot { border-radius: 0; }
 .member__photo img { transition: transform 0.35s ease; }
 .member:hover .member__photo img { transform: scale(1.07); }
-.member__name { margin-top: 6px; font-size: 26px; }
+.member__name { min-height: calc(var(--name-lines) * 1.1em); margin-top: 6px; font-size: clamp(19px, 10.5cqi, 26px); line-height: 1.1; text-wrap: balance; overflow-wrap: anywhere; }
+.member__role-slot { min-height: 30px; } /* reserva 1 linha de chip (2 no cartão estreito, abaixo) */
 .member__role { box-shadow: 2px 2px 0 var(--ink); }
-.member__tagline { font-size: 21px; line-height: 1.1; }
+.member__tagline { min-height: calc(var(--tagline-lines) * 1.1em); font-size: 21px; line-height: 1.1; }
 
-/* Sticker no canto superior esquerdo (por cima da foto) */
-.member__sticker { position: absolute; top: -24px; left: -22px; z-index: 3; width: 78px; height: 78px; object-fit: contain; transform: rotate(-14deg); filter: drop-shadow(2px 3px 0 rgba(27, 27, 34, 0.35)); pointer-events: none; transition: transform 0.25s ease; }
-.member:hover .member__sticker { transform: rotate(8deg) scale(1.12); }
+/* Decal (adesivo decorativo) no canto superior esquerdo, por cima da foto */
+.member__decal { position: absolute; top: -24px; left: -22px; z-index: 3; width: 78px; height: 78px; object-fit: contain; transform: rotate(-14deg); filter: drop-shadow(2px 3px 0 rgba(27, 27, 34, 0.35)); pointer-events: none; transition: transform 0.25s ease; }
+.member:hover .member__decal { transform: rotate(8deg) scale(1.12); }
 
 /* LinkedIn e GitHub, logo abaixo da foto */
-.member__links { display: flex; flex-wrap: wrap; gap: 8px; }
+/* min-height reserva a linha dos botões mesmo para quem não tem links (mantém os cartões alinhados) */
+.member__links { display: flex; flex-wrap: wrap; gap: 8px; min-height: 35px; }
 .member__link { display: inline-flex; align-items: center; gap: 6px; padding: 5px 12px 5px 10px; box-shadow: 2px 2px 0 var(--ink); }
 .member__link:hover { color: var(--pink); }
 .member__icon { width: 16px; height: 16px; flex: none; }
+/* Cartão estreito: os botões viram só o ícone para caber numa linha (o texto continua para leitores de tela) */
+@container (max-width: 260px) {
+  .member__link { padding: 7px 9px; }
+  .member__link-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+}
+/* Cartão muito estreito (celular): reserva 3 linhas para o nome e 2 para o título, que passam a quebrar */
+@container (max-width: 200px) {
+  .member__name { --name-lines: 3; }
+  .member__role-slot { min-height: 46px; }
+}
 
 @media (max-width: 1000px) { .members__grid { --cols: 3; } }
 @media (max-width: 900px) {
@@ -54,16 +70,12 @@
 @media (max-width: 700px) {
   .members__grid { --cols: 2; --gap: 16px; row-gap: 30px; }
   .member { gap: 8px; padding: 10px 10px 16px; }
-  .member__name { font-size: 20px; }
   .member__tagline { font-size: 18px; }
-  .member__sticker { top: -16px; left: -12px; width: 56px; height: 56px; }
-  /* No celular os botões viram só o ícone (o texto continua para leitores de tela) */
-  .member__link { padding: 7px 9px; }
-  .member__link-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .member__decal { top: -16px; left: -12px; width: 56px; height: 56px; }
 }
 @media (max-width: 360px) { .members__grid { --cols: 1; } }
 
 @media (prefers-reduced-motion: reduce) {
   .team-hero__star { animation: none; }
-  .member__photo img, .member__sticker { transition: none; }
+  .member__photo img, .member__decal { transition: none; }
 }

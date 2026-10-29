@@ -1,7 +1,7 @@
 import { links, anchorId } from "@/shared/config/links"
-import { Button, SectionTitle, Star, Sticker } from "@/shared/ui"
-import { joinCards, joinCopy } from "../data"
-import "../community.css"
+import { LinkButton, SectionTitle, Star, Sticker } from "@/shared/ui"
+import { joinCards, joinCopy } from "../content"
+import "../join.css"
 
 export default function JoinSection() {
   return (
@@ -14,9 +14,9 @@ export default function JoinSection() {
               <Star className="doodle join__star" />
               <h3>{card.title}</h3>
               <p className="text-justify">{card.text}</p>
-              <Button href={card.href} variant="light">
+              <LinkButton href={card.href} variant="light">
                 {card.cta}
-              </Button>
+              </LinkButton>
             </Sticker>
           ))}
         </div>

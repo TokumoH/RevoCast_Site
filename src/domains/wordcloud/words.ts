@@ -1,4 +1,4 @@
-import { cloudLimits, cloudSize } from "./data"
+import { cloudLimits, cloudSize } from "./content"
 import type { CloudWord } from "./model"
 
 // Palavras iguais ignoram maiúsculas e acentos: "Café" e "cafe" contam como a mesma.

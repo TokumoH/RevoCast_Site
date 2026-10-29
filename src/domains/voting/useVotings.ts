@@ -1,6 +1,6 @@
 import { useCallback, useRef, useState } from "react"
 import type { Project, Voting } from "./model"
-import { votingLimits } from "./data"
+import { votingLimits } from "./content"
 
 const STORAGE_KEY = "revocast:voting:sessions:v2"
 const LEGACY_STORAGE_KEY = "revocast:voting:state:v1"

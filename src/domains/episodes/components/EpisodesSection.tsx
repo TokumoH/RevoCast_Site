@@ -1,7 +1,7 @@
 import { links, anchorId } from "@/shared/config/links"
-import { Button, SectionTitle } from "@/shared/ui"
-import { episodesCopy } from "../data"
-import { useEpisodes } from "../useEpisodes"
+import { LinkButton, SectionTitle } from "@/shared/ui"
+import { episodesCopy } from "../content"
+import { useEpisodes } from "../useChannelData"
 import EpisodeCard from "./EpisodeCard"
 import LatestEpisode from "./LatestEpisode"
 import "../episodes.css"
@@ -24,9 +24,9 @@ export default function EpisodesSection() {
           </div>
         )}
         <div className="episodes__more">
-          <Button href={links.platforms.youtube} variant="light">
+          <LinkButton href={links.platforms.youtube} variant="light">
             {episodesCopy.moreLabel}
-          </Button>
+          </LinkButton>
         </div>
       </div>
     </section>

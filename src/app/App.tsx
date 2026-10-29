@@ -1,7 +1,7 @@
-import { Footer, Header, Hero, ThemeTicker } from "@/domains/brand"
+import { Footer, Header, Hero, HomeTicker } from "@/domains/brand"
 import { EpisodesSection } from "@/domains/episodes"
 import { AboutSection } from "@/domains/about"
-import { JoinSection } from "@/domains/community"
+import { JoinSection } from "@/domains/join"
 import { ContactSection } from "@/domains/contact"
 import { WordCloudPage } from "@/domains/wordcloud"
 import { VotingPage } from "@/domains/voting"
@@ -33,7 +33,7 @@ export default function App() {
       <main>
         <div hidden={route !== "home"}>
           <Hero />
-          <ThemeTicker />
+          <HomeTicker />
           <EpisodesSection />
           <AboutSection />
           <JoinSection />

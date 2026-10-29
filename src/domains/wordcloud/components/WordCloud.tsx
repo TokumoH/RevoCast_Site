@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react"
-import { cloudCopy, timesLabel } from "../data"
+import { cloudCopy, timesLabel } from "../content"
 import type { CloudWord } from "../model"
 import { useCloudLayout } from "../useCloudLayout"
 import { wordHash, wordSize } from "../words"

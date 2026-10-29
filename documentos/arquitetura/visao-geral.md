@@ -36,11 +36,12 @@ revocast-site/
 │   ├── vote-code-hashes.json  # hashes dos códigos de votação válidos
 │   └── images/                # TODAS as imagens, em pastas por domínio
 │       ├── brand/             #   logo.png
+│       │   (convenção de nomes: minúsculas com hífen, ex. ep01.jpg, membro-01.svg, equipe-toda.jpeg)
 │       ├── episodes/          #   capas personalizadas dos episódios
 │       ├── about/             #   foto da equipe (seção Sobre)
 │       ├── team/              #   página Equipe: foto de toda a equipe e fotos dos integrantes
-│       │   └── stickers/      #     stickers dos cartões (placeholder.svg = sticker padrão)
-│       └── community/         #   (reservada para imagens de convidados/plateia)
+│       │   └── decals/        #     adesivos dos cartões (placeholder.svg = decal padrão)
+│       └── join/              #   (reservada para imagens de convidados/plateia)
 ├── documentos/                # Documentação técnica, guias e relatórios de ação
 └── src/
     ├── app/
@@ -48,7 +49,7 @@ revocast-site/
     │   └── App.tsx            #   ordem das seções e páginas
     ├── shared/
     │   ├── config/
-    │   │   ├── links.ts       #   TODOS os links (plataformas, contato, âncoras, rotas)
+    │   │   ├── links.ts       #   links do site (plataformas, contato, rotas, âncoras)
     │   │   ├── images.ts      #   TODAS as variáveis de imagem
     │   │   └── site.ts        #   nome, instituição, ano
     │   ├── motion/            #   animações (entrada ao rolar, flutuar) e o CSS delas
@@ -58,16 +59,17 @@ revocast-site/
     │   │   └── base.css       #   reset e tipografia
     │   └── ui/                #   componentes visuais reutilizáveis
     │       ├── Sticker.tsx    #     bloco "adesivo" (borda grossa, sombra, inclinação, fita)
-    │       ├── Button.tsx     #     botão-link (desativa sozinho se o link estiver vazio)
+    │       ├── LinkButton.tsx #     botão que é link (desativa sozinho se o link estiver vazio)
     │       ├── ActionButton.tsx #   botão que executa uma ação (enviar, votar, auditar)
     │       ├── Bubble.tsx     #     balão de fala
     │       ├── ImageSlot.tsx  #     imagem ou espaço reservado se estiver vazia
     │       ├── SectionTitle.tsx #   título padrão de seção
+    │       ├── Ticker.tsx     #     faixa de palavras que corre (cada domínio passa a lista)
     │       ├── Doodles.tsx    #     rabiscos (estrela, brilho, onda, seta)
     │       ├── Icons.tsx      #     ícones (LinkedIn, GitHub…)
     │       └── ui.css
     └── domains/               # Um domínio por pasta (ver dominios.md)
-        ├── brand/  episodes/  about/  community/  contact/
+        ├── brand/  episodes/  about/  join/  contact/
         └── wordcloud/  team/  voting/
 ```
 
@@ -76,7 +78,7 @@ revocast-site/
 ```
 domains/<domínio>/
 ├── model.ts        # tipos/entidades do domínio (quando existem)
-├── data.ts         # conteúdo editável (textos, listas)
+├── content.ts      # conteúdo editável (textos, listas): objeto <domínio>Copy
 ├── components/     # componentes React do domínio
 ├── <domínio>.css   # estilo do domínio
 └── index.ts        # "porta de entrada": o que o domínio expõe para os outros
@@ -92,7 +94,7 @@ funcionam em qualquer hospedagem estática. As páginas ficam sempre montadas em
 escondidas ao trocar de rota.
 
 **Adicionar uma página:** crie o domínio, adicione a rota em `links.pages` e em `shared/router/useHashRoute.ts`,
-o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
+o link em `brandCopy.pageNav` (`domains/brand/content.ts`) e o bloco em `src/app/App.tsx`.
 
 ## Ordem dos estilos
 

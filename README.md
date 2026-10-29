@@ -28,7 +28,7 @@ revocast-site/
 ├── scripts/      # ferramentas de linha de comando
 └── src/
     ├── app/      # ponto de entrada e composição das páginas
-    ├── domains/  # brand, episodes, about, community, contact, wordcloud, voting, team
+    ├── domains/  # brand, episodes, about, join, contact, wordcloud, voting, team
     └── shared/   # UI reutilizável, animações, roteador, configuração e estilos
 ```
 
@@ -40,4 +40,5 @@ Toda a documentação fica em [`documentos/`](documentos/README.md):
 - [Guia de edição de conteúdo](documentos/guias/edicao-de-conteudo.md) — "quero mudar X → arquivo Y"
 - [Deploy na Vercel e YouTube API](documentos/guias/deploy-vercel.md)
 - [Votação presencial com códigos](documentos/guias/votacao-presencial.md)
+- [Dicionário do projeto](documentos/dicionario.md) — o que significa cada termo e onde fica
 - [Decisões de arquitetura (ADR)](documentos/arquitetura/adr/) e [relatórios de ação](documentos/relatorios/)

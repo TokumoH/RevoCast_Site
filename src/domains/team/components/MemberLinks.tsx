@@ -1,14 +1,14 @@
-import { memberLinks } from "@/shared/config/links"
 import { GitHubIcon, LinkedInIcon } from "@/shared/ui"
-import { teamCopy } from "../data"
+import { teamCopy } from "../content"
+import type { MemberProfiles } from "../model"
 
-type Props = { id: string; name: string }
+type Props = { profiles?: MemberProfiles; name: string }
 
-// Botões de LinkedIn e GitHub, abaixo da foto. Os links ficam em shared/config/links.ts (links.team).
-// Link vazio = o botão não aparece; sem nenhum link, o bloco inteiro some.
-export default function MemberLinks({ id, name }: Props) {
-  const { linkedin, github } = memberLinks(id)
-  if (!linkedin && !github) return null
+// Botões de LinkedIn e GitHub, abaixo da foto. Os links vêm do campo "profiles" do integrante (team/data.ts).
+// Link vazio = o botão não aparece. O bloco é sempre renderizado (vazio, se for o caso) para reservar a
+// mesma altura em todos os cartões.
+export default function MemberLinks({ profiles = {}, name }: Props) {
+  const { linkedin, github } = profiles
   return (
     <div className="member__links">
       {linkedin && (

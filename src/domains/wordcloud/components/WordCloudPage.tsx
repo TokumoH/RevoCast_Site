@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react"
 import { ActionButton, SectionTitle, Spark, Star, Sticker } from "@/shared/ui"
-import { cloudCopy, cloudLimits } from "../data"
+import { cloudCopy, cloudLimits } from "../content"
 import { useWordCloud } from "../useWordCloud"
 import WordCloud from "./WordCloud"
 import "../wordcloud.css"

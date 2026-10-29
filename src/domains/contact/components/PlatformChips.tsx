@@ -1,4 +1,4 @@
-import { platforms } from "../data"
+import { platforms } from "../content"
 import type { PlatformKey } from "../model"
 
 // Lista de plataformas como etiquetas clicáveis.

@@ -1,5 +1,5 @@
 import { fallbackEpisodes } from "./fallback"
-import type { ApiEpisode, ChannelStats, Episode, YouTubeData } from "./model"
+import type { ApiEpisode, ChannelStats, Episode, ChannelData } from "./model"
 
 function isApiEpisode(value: unknown): value is ApiEpisode {
   if (typeof value !== "object" || value === null) return false
@@ -19,14 +19,14 @@ function isChannelStats(value: unknown): value is ChannelStats {
     && (typeof stats.subscriberCount === "number" || stats.subscriberCount === null)
 }
 
-async function requestYouTubeData(): Promise<{ episodes: Episode[]; stats: ChannelStats | null }> {
+async function requestChannelData(): Promise<{ episodes: Episode[]; stats: ChannelStats | null }> {
   const response = await fetch("/api/episodes")
   if (!response.ok) throw new Error("Não foi possível carregar os episódios da API.")
 
   const payload: unknown = await response.json()
   if (typeof payload !== "object" || payload === null) throw new Error("Resposta inválida da API de episódios.")
 
-  const data = payload as Partial<YouTubeData>
+  const data = payload as Partial<ChannelData>
   if (!Array.isArray(data.episodes)) throw new Error("Resposta inválida da API de episódios.")
 
   const fallbackByVideoId = new Map(fallbackEpisodes.map((episode) => [episode.youtubeId, episode]))
@@ -44,9 +44,9 @@ async function requestYouTubeData(): Promise<{ episodes: Episode[]; stats: Chann
 
 let cachedRequest: Promise<{ episodes: Episode[]; stats: ChannelStats | null }> | undefined
 
-export function fetchYouTubeData() {
+export function fetchChannelData() {
   if (!cachedRequest) {
-    cachedRequest = requestYouTubeData().catch((error: unknown) => {
+    cachedRequest = requestChannelData().catch((error: unknown) => {
       cachedRequest = undefined
       throw error
     })
