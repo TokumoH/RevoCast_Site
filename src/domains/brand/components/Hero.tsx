@@ -13,7 +13,9 @@ export default function Hero() {
     <section className="hero container" id={anchorId(links.anchors.top)}>
       <div className="hero__text">
         <Sticker tone="cyan" tilt={-2} className="hero__tag" reveal>
-          {site.org} · {site.school}
+          <a href={links.institution.campus} target="_blank" rel="noreferrer">
+            {site.org} · {site.school}
+          </a>
         </Sticker>
         <Reveal as="h1" delay={120}>
           {brandCopy.hero.title} <mark>{brandCopy.hero.highlight}</mark>

@@ -11,7 +11,6 @@ podcast tem seu modelo, dados, componentes e estilo. O que é comum a todos fica
 | `src/domains/<domínio>/` | Regras, dados e componentes de cada contexto do negócio | `shared` e outros domínios **só pelo `index.ts`** |
 | `src/shared/` | Núcleo compartilhado (Pure Fabrication): UI reutilizável, animações, roteador, configuração, estilos | nada de `domains` |
 | `api/` | Infraestrutura: função serverless da Vercel (`/api/episodes`) | — |
-| `scripts/` | Ferramentas de linha de comando (geração de códigos de votação) | — |
 
 ### Regras de dependência
 
@@ -29,11 +28,7 @@ revocast-site/
 ├── tsconfig.json
 ├── api/
 │   └── episodes.ts            # Função serverless que consulta a playlist do YouTube
-├── scripts/
-│   └── vote-code.mjs          # Gera/valida códigos de votação (npm run vote-codes)
-├── private/                   # (fora do Git) códigos de votação em texto puro
 ├── public/
-│   ├── vote-code-hashes.json  # hashes dos códigos de votação válidos
 │   └── images/                # TODAS as imagens, em pastas por domínio
 │       ├── brand/             #   logo.png
 │       │   (convenção de nomes: minúsculas com hífen, ex. ep01.jpg, membro-01.svg, equipe-toda.jpeg)

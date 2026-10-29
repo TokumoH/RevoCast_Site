@@ -1,12 +1,10 @@
-import { projectScore } from "../ballot"
 import { votingCopy } from "../content"
-import type { Project, VoteDirection } from "../model"
+import type { VoteDirection } from "../model"
+import { canVoteDown } from "../voteRule"
 
 type Props = {
-  project: Project
-  label: string
-  current?: VoteDirection // voto do votante ativo neste projeto (se houver)
-  disabled: boolean // sem votante ativo
+  votes: number
+  label: string // nome do projeto (para leitores de tela)
   onVote: (direction: VoteDirection) => void
 }
 
@@ -16,17 +14,15 @@ const Arrow = ({ up }: { up?: boolean }) => (
   </svg>
 )
 
-// Seta ▲, pontuação e seta ▼, como no Reddit. aria-pressed indica o voto atual do votante.
-export default function VoteControl({ project, label, current, disabled, onVote }: Props) {
-  const score = projectScore(project)
-  const title = disabled ? votingCopy.needVoter : undefined
+// Seta ▲, pontuação e seta ▼. A ▼ fica desativada em zero (a pontuação nunca é negativa).
+export default function VoteControl({ votes, label, onVote }: Props) {
   return (
-    <div className={`vote${current === 1 ? " is-up" : current === -1 ? " is-down" : ""}`}>
-      <button type="button" className="vote__btn vote__btn--up" aria-pressed={current === 1} aria-label={votingCopy.upvote(label)} title={title} disabled={disabled} onClick={() => onVote(1)}>
+    <div className="vote">
+      <button type="button" className="vote__btn vote__btn--up" aria-label={votingCopy.upvote(label)} onClick={() => onVote(1)}>
         <Arrow up />
       </button>
-      <span className="vote__score" aria-label={votingCopy.scoreLabel(score)} aria-live="polite">{score}</span>
-      <button type="button" className="vote__btn vote__btn--down" aria-pressed={current === -1} aria-label={votingCopy.downvote(label)} title={title} disabled={disabled} onClick={() => onVote(-1)}>
+      <span className="vote__score" aria-label={votingCopy.scoreLabel(votes)} aria-live="polite">{votes}</span>
+      <button type="button" className="vote__btn vote__btn--down" aria-label={votingCopy.downvote(label)} disabled={!canVoteDown(votes)} onClick={() => onVote(-1)}>
         <Arrow />
       </button>
     </div>

@@ -15,7 +15,6 @@ npm run dev        # servidor de desenvolvimento (http://localhost:5173)
 npm run typecheck  # checa os tipos
 npm run build      # gera a versão final em dist/
 npm run preview    # serve o conteúdo de dist/ localmente
-npm run vote-codes -- generate 100   # gera códigos de votação
 ```
 
 ## Estrutura
@@ -24,8 +23,7 @@ npm run vote-codes -- generate 100   # gera códigos de votação
 revocast-site/
 ├── api/          # função serverless da Vercel (/api/episodes)
 ├── documentos/   # arquitetura, guias e relatórios de ação  ← comece por aqui
-├── public/       # imagens (por domínio) e hashes dos códigos de votação
-├── scripts/      # ferramentas de linha de comando
+├── public/       # imagens, em pastas por domínio
 └── src/
     ├── app/      # ponto de entrada e composição das páginas
     ├── domains/  # brand, episodes, about, join, contact, wordcloud, voting, team
@@ -39,6 +37,6 @@ Toda a documentação fica em [`documentos/`](documentos/README.md):
 - [Visão geral da arquitetura](documentos/arquitetura/visao-geral.md) e [domínios](documentos/arquitetura/dominios.md)
 - [Guia de edição de conteúdo](documentos/guias/edicao-de-conteudo.md) — "quero mudar X → arquivo Y"
 - [Deploy na Vercel e YouTube API](documentos/guias/deploy-vercel.md)
-- [Votação presencial com códigos](documentos/guias/votacao-presencial.md)
+- [Votação presencial (▲/▼)](documentos/guias/votacao-presencial.md)
 - [Dicionário do projeto](documentos/dicionario.md) — o que significa cada termo e onde fica
 - [Decisões de arquitetura (ADR)](documentos/arquitetura/adr/) e [relatórios de ação](documentos/relatorios/)

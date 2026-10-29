@@ -1,18 +1,14 @@
 import { useEffect, useMemo, useRef, useState, type FormEvent } from "react"
 import { ActionButton, SectionTitle, Sticker } from "@/shared/ui"
-import { votingCopy, votingLimits, votesLabel } from "../content"
+import { pointsLabel, votingCopy, votingLimits } from "../content"
 import { audit } from "../audit"
-import { projectVotes } from "../ballot"
-import { useVoterSession } from "../useVoterSession"
 import { useVotings } from "../useVotings"
 import AuditChart from "./AuditChart"
 import ProjectCard from "./ProjectCard"
-import VoterPanel from "./VoterPanel"
 import "../voting.css"
 
 export default function VotingPage() {
-  const { votings, createVoting, deleteVoting, addProject, setName, setImage, isLocked, castVote } = useVotings()
-  const session = useVoterSession(isLocked)
+  const { votings, createVoting, deleteVoting, addProject, setName, setImage, castVote } = useVotings()
   const [selectedVotingId, setSelectedVotingId] = useState<string | null>(null)
   const [newTitle, setNewTitle] = useState("")
   const [formError, setFormError] = useState("")
@@ -21,11 +17,10 @@ export default function VotingPage() {
   const resultRef = useRef<HTMLDivElement>(null)
   const selectedVoting = votings.find((voting) => voting.id === selectedVotingId) ?? null
   const result = useMemo(() => audited && selectedVoting ? audit(selectedVoting.projects) : null, [audited, selectedVoting])
-  const totalVotes = (projects: { ups: number; downs: number }[]) => projects.reduce((total, project) => total + projectVotes(project), 0)
-  const ballot = session.voter && selectedVoting ? selectedVoting.ballots[session.voter.hash] ?? {} : {}
+  const totalVotes = (projects: { votes: number }[]) => projects.reduce((total, project) => total + project.votes, 0)
   const [voteError, setVoteError] = useState("")
 
-  const leaveVoting = () => { session.end(); setSelectedVotingId(null); setAudited(false); setVoteError("") }
+  const leaveVoting = () => { setSelectedVotingId(null); setAudited(false); setVoteError("") }
 
   useEffect(() => {
     if (!audited) return
@@ -79,7 +74,7 @@ export default function VotingPage() {
                     <div className="voting-item__content">
                       <span className="chip chip--sand">{voting.projects.length}/{votingLimits.maxProjects} projetos</span>
                       <h3>{voting.title}</h3>
-                      <p className="note">Criada em {new Date(voting.createdAt).toLocaleDateString("pt-BR")} · {votesLabel(totalVotes(voting.projects))}</p>
+                      <p className="note">Criada em {new Date(voting.createdAt).toLocaleDateString("pt-BR")} · {pointsLabel(totalVotes(voting.projects))}</p>
                     </div>
                     <div className="voting-item__actions">
                       <ActionButton onClick={() => { setSelectedVotingId(voting.id); setAudited(false); setFormError(""); setFormMessage("") }}>Entrar na votação</ActionButton>
@@ -101,12 +96,11 @@ export default function VotingPage() {
               <button type="button" className="voting-back" onClick={leaveVoting}>← Todas as votações</button>
               <span className="chip chip--pink">Votação em andamento</span>
             </div>
-            <SectionTitle eyebrow="Votação" title={selectedVoting.title} note={`Adicione até ${votingLimits.maxProjects} projetos. Projetos cadastrados não podem ser excluídos.`} />
+            <SectionTitle eyebrow="Votação" title={selectedVoting.title} note={`Adicione até ${votingLimits.maxProjects} projetos. ${votingCopy.voteHint}`} />
             <div className="voting-session-meta">
               <span className="chip chip--sand">{selectedVoting.projects.length}/{votingLimits.maxProjects} projetos</span>
-              <span className="chip chip--cyan">{votesLabel(totalVotes(selectedVoting.projects))}</span>
+              <span className="chip chip--cyan">{pointsLabel(totalVotes(selectedVoting.projects))}</span>
             </div>
-            <VoterPanel voter={session.voter} busy={session.busy} onStart={session.start} onEnd={session.end} />
             {voteError && <p className="voting-feedback" role="alert">{voteError}</p>}
             <div className="voting__grid">
               {selectedVoting.projects.map((project, index) => (
@@ -116,12 +110,9 @@ export default function VotingPage() {
                   index={index}
                   onName={(name) => setName(selectedVoting.id, project.id, name)}
                   onImage={(file) => setImage(selectedVoting.id, project.id, file)}
-                  current={ballot[String(project.id)]}
-                  canVote={!!session.voter}
                   onVote={(direction) => {
-                    if (!session.voter) return
                     setVoteError("")
-                    try { castVote(selectedVoting.id, session.voter.hash, project.id, direction); session.touch(); setAudited(false) }
+                    try { castVote(selectedVoting.id, project.id, direction); setAudited(false) }
                     catch (error) { setVoteError(error instanceof Error ? error.message : "Não foi possível registrar o voto.") }
                   }}
                 />

@@ -17,7 +17,7 @@
 |---|---|
 | [guias/edicao-de-conteudo.md](guias/edicao-de-conteudo.md) | Quem vai trocar textos, links, imagens, episódios e integrantes |
 | [guias/deploy-vercel.md](guias/deploy-vercel.md) | Publicação na Vercel e configuração da YouTube Data API |
-| [guias/votacao-presencial.md](guias/votacao-presencial.md) | Organização da votação com códigos na feira |
+| [guias/votacao-presencial.md](guias/votacao-presencial.md) | Organização da votação ▲/▼ na feira |
 
 ## Relatórios de ação
 
@@ -30,6 +30,7 @@ Cada mudança relevante gera um relatório em [relatorios/](relatorios/), nomead
 | 2026-10-29 | [Perfis da equipe no domínio e cartões de mesmo tamanho](relatorios/2026-10-29-equipe-perfis-e-cartoes.md) |
 | 2026-10-29 | [Renomeação para nomes mais claros](relatorios/2026-10-29-convencao-de-nomes.md) |
 | 2026-10-29 | [Decals por cargo e votação ▲/▼](relatorios/2026-10-29-decals-e-votacao-updown.md) |
+| 2026-10-29 | [Votação sem código e link do IFSP](relatorios/2026-10-29-votacao-sem-codigo-e-link-ifsp.md) |
 
 ## Pendências conhecidas
 

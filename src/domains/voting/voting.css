@@ -10,28 +10,17 @@
 .project__footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
 .project__footer .field { min-width: 0; }
 
-/* Voto ▲/▼ estilo Reddit: seta, pontuação e seta; a seta ativa fica colorida (aria-pressed) */
+/* Voto ▲/▼: seta, pontuação e seta. ▼ desativada quando a pontuação é zero. */
 .vote { display: grid; justify-items: center; gap: 2px; }
 .vote__btn { display: grid; place-items: center; width: 44px; height: 38px; padding: 0; color: var(--paper); background: #fff; border: var(--border); border-radius: 12px; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.12s; }
 .vote__btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
 .vote__btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.vote__btn--up:active:not(:disabled) { color: #fff; background: var(--pink); }
+.vote__btn--down:active:not(:disabled) { color: #fff; background: var(--cyan); }
 .vote__btn:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
 .vote__btn:disabled { cursor: not-allowed; opacity: 0.45; }
-.vote__btn--up[aria-pressed="true"] { color: #fff; background: var(--pink); }
-.vote__btn--down[aria-pressed="true"] { color: #fff; background: var(--cyan); }
 .vote__arrow { width: 22px; height: 22px; }
 .vote__score { min-width: 44px; font: 400 26px/1.1 var(--font-display); text-align: center; }
-.vote.is-up .vote__score { color: var(--pink); }
-.vote.is-down .vote__score { color: #0e7490; }
-
-/* Painel do votante (código digitado uma vez) */
-.voter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; max-width: 860px; margin: 0 0 40px; padding: 22px 24px; }
-.voter__form { display: grid; gap: 12px; width: 100%; }
-.voter__text { display: grid; justify-items: start; gap: 6px; }
-.voter__text h3 { margin: 0; font-size: 28px; }
-.voter__text .note { margin: 0; }
-.voter__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
-.voter__row .field { min-width: 0; }
 
 /* Cartão "adicionar projeto" */
 .project-add { display: grid; gap: 12px; place-content: center; justify-items: center; min-height: 300px; padding: 20px; font: 400 22px/1.1 var(--font-display); color: var(--ink); background: transparent; border: var(--border); border-style: dashed; border-radius: var(--radius); }
@@ -54,15 +43,11 @@ button.project-add:hover { background: var(--cyan-soft); transform: rotate(-1deg
 .audit__track { display: block; height: 30px; background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; }
 .audit__fill { display: block; height: 100%; background: var(--cyan); border: 2.5px solid var(--ink); border-radius: 999px; }
 .audit__row.is-champion .audit__fill { background: var(--pink); }
-.audit__row.is-negative .audit__fill { background: var(--gray); }
-.audit__detail { display: block; font: 700 12px/1.2 var(--font-body); color: var(--gray); }
 .audit__value { font: 400 22px/1 var(--font-display); text-align: right; }
 .audit__total { justify-self: end; }
 @media (max-width: 600px) {
   .voting__grid { grid-template-columns: 1fr; }
   .audit__row { grid-template-columns: 1fr 40px; }
-  .voter__row { grid-template-columns: 1fr; }
-  .voter__row .btn { justify-content: center; }
   .audit__label { grid-column: 1 / -1; }
 }
 

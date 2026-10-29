@@ -1,10 +1,9 @@
 import type { CSSProperties } from "react"
 import { Star, Sticker } from "@/shared/ui"
-import { pointsLabel, votesLabel, votingCopy } from "../content"
+import { pointsLabel, votingCopy } from "../content"
 import type { AuditResult } from "../model"
 
-// Resultado da auditoria: aviso do campeão e gráfico com a pontuação (▲ - ▼) de cada projeto.
-// Pontuação negativa aparece em barra cinza; o detalhe ▲/▼ fica ao lado do nome.
+// Resultado da auditoria: aviso do campeão e gráfico de barras com a pontuação de cada projeto.
 export default function AuditChart({ result }: { result: AuditResult }) {
   const { rows, champions, totalVotes } = result
   const championIds = new Set(champions.map((c) => c.id))
@@ -18,26 +17,23 @@ export default function AuditChart({ result }: { result: AuditResult }) {
           <Star className="audit__star" />
           <span className="chip chip--pink">{headline}</span>
           <strong>{champions.map((c) => c.label).join(" • ")}</strong>
-          <span>{pointsLabel(champions[0].score)}</span>
+          <span>{pointsLabel(champions[0].votes)}</span>
         </p>
       ) : (
         <p className="audit__winner note">{votingCopy.noVotes}</p>
       )}
       <ul className="audit__chart" aria-label={votingCopy.chartLabel}>
         {rows.map((row) => (
-          <li key={row.id} className={`audit__row${championIds.has(row.id) ? " is-champion" : ""}${row.score < 0 ? " is-negative" : ""}`}>
-            <span className="audit__label">
-              {row.label}
-              <small className="audit__detail">▲ {row.ups} · ▼ {row.downs}</small>
-            </span>
+          <li key={row.id} className={`audit__row${championIds.has(row.id) ? " is-champion" : ""}`}>
+            <span className="audit__label">{row.label}</span>
             <span className="audit__track">
-              {row.score !== 0 && <span className="audit__fill" style={{ width: `${row.ratio * 100}%` } as CSSProperties} />}
+              {row.votes > 0 && <span className="audit__fill" style={{ width: `${row.ratio * 100}%` } as CSSProperties} />}
             </span>
-            <span className="audit__value">{row.score}</span>
+            <span className="audit__value">{row.votes}</span>
           </li>
         ))}
       </ul>
-      <p className="audit__total note">Total: {votesLabel(totalVotes)}</p>
+      <p className="audit__total note">Total: {pointsLabel(totalVotes)}</p>
     </Sticker>
   )
 }

@@ -18,6 +18,10 @@ export const links = {
     whatsapp: "", // ✏️ link completo, ex.: "https://wa.me/55..."
     guestForm: "", // ✏️ link do formulário para convidados (ex.: Google Forms)
   },
+  // Instituição (selo do topo da home)
+  institution: {
+    campus: "https://bri.ifsp.edu.br/", // site do IFSP campus Birigui
+  },
   // Páginas interativas (rotas por "#/", sem recarregar o site)
   pages: {
     cloud: "#/nuvem",

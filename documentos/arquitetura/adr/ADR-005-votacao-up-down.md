@@ -1,7 +1,7 @@
 # ADR-005 — Votação ▲/▼ (estilo Reddit) com sessão de votante
 
 - **Data:** 2026-10-29
-- **Status:** Aceita
+- **Status:** Substituída pelo [ADR-006](ADR-006-votacao-sem-codigo.md) (votação sem código)
 
 ## Contexto
 

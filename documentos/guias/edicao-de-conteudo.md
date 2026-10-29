@@ -9,13 +9,14 @@
 | **Episódios** (textos da seção e fallback) | `src/domains/episodes/content.ts`, `src/domains/episodes/fallback.ts` |
 | Textos da abertura e do menu (inclusive o link **Equipe**, que fica por último) e os links **Nuvem** e **Votação** do cabeçalho | `src/domains/brand/content.ts` |
 | Textos e limites da página **Nuvem de palavras** | `src/domains/wordcloud/content.ts` |
-| Textos e limites da página **Votação** (máximo de projetos, tempo da sessão do votante) | `src/domains/voting/content.ts` |
+| Textos e limites da página **Votação** (máximo de projetos) | `src/domains/voting/content.ts` |
 | **Equipe**: adicionar/remover pessoas, trocar nome, título e foto, textos da página | `src/domains/team/content.ts` (fotos em `public/images/team/`) |
 | **Equipe**: LinkedIn e GitHub de cada pessoa | `src/domains/team/content.ts` (campo `profiles` de cada pessoa) |
 | Texto "Sobre", números e selos | `src/domains/about/content.ts` |
 | Textos de "Participe" (convidados e plateia) | `src/domains/join/content.ts` |
 | Textos de "Contato" e plataformas | `src/domains/contact/content.ts` |
 | Nome, instituição e ano | `src/shared/config/site.ts` |
+| Link do selo "Atlética Revoada · IFSP campus Birigui" (topo da home) | `src/shared/config/links.ts` (`links.institution.campus`) |
 | **Cores, bordas e fontes** | `src/shared/styles/tokens.css` |
 
 ## Tarefas comuns

@@ -6,8 +6,6 @@ import VoteControl from "./VoteControl"
 type Props = {
   project: Project
   index: number
-  current?: VoteDirection // voto do votante ativo neste projeto
-  canVote: boolean
   onName: (name: string) => void
   onImage: (file: File | undefined) => void
   onVote: (direction: VoteDirection) => void
@@ -15,7 +13,7 @@ type Props = {
 
 const tones = ["paper", "pink", "cyan", "sand"] as const
 
-export default function ProjectCard({ project, index, current, canVote, onName, onImage, onVote }: Props) {
+export default function ProjectCard({ project, index, onName, onImage, onVote }: Props) {
   const label = projectLabel(project.name, index)
   return (
     <Sticker tone={tones[index % tones.length]} tilt={index % 2 ? 1.2 : -1.2} className="project" reveal hover>
@@ -27,7 +25,7 @@ export default function ProjectCard({ project, index, current, canVote, onName, 
       </label>
       <div className="project__footer">
         <input className="field" type="text" value={project.name} onChange={(e) => onName(e.target.value)} maxLength={votingLimits.nameMax} placeholder={votingCopy.namePlaceholder} aria-label={`${votingCopy.nameLabel} ${index + 1}`} autoComplete="off" />
-        <VoteControl project={project} label={label} current={current} disabled={!canVote} onVote={onVote} />
+        <VoteControl votes={project.votes} label={label} onVote={onVote} />
       </div>
     </Sticker>
   )

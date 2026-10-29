@@ -35,17 +35,15 @@ pontas são ignorados (`Café`, `cafe` e `cafe!` são a mesma palavra). A nuvem 
 ## voting
 
 Crie uma votação, entre nela e cadastre até 10 projetos (`votingLimits.maxProjects`), cada um com imagem e nome.
-O votante digita o código uma vez e vota com ▲/▼ (estilo Reddit). Projetos não podem ser excluídos pela interface;
-votações inteiras podem.
+Cada projeto recebe ▲ (+1) e ▼ (−1), sem código; a pontuação mínima é zero. Projetos não podem ser excluídos pela
+interface; votações inteiras podem.
 
-- `model.ts`: agregado `Voting` (projetos + `ballots`), `Project` (`ups`, `downs`), `Ballot`, `VoteDirection`.
-- `ballot.ts`: regra pura do voto (`nextDirection`, `applyVote`) e `projectScore`/`projectVotes`.
+- `model.ts`: agregado `Voting` (projetos), `Project` (`votes` = pontuação), `VoteDirection`.
+- `voteRule.ts`: regra pura do voto (`applyVote`, `canVoteDown`, `MIN_VOTES = 0`).
 - `audit.ts`: ranking pela pontuação e vencedor (empates aparecem como "Empate no topo").
-- `voteCodes.ts`: validação do código (formato, SHA-256, lote em `public/vote-code-hashes.json`).
-- `votingStore.ts`: leitura/gravação no `localStorage` e migração dos formatos antigos (v1, v2 → v3).
+- `votingStore.ts`: leitura/gravação no `localStorage` (v4) e migração dos formatos antigos (v1, v2, v3).
 - `useVotings.ts`: estado das votações e operações (criar, excluir, projetos, `castVote`).
-- `useVoterSession.ts`: sessão do votante na memória, com encerramento por inatividade.
-- Componentes: `VotingPage`, `VoterPanel`, `ProjectCard`, `VoteControl` (▲ pontuação ▼), `AuditChart`.
+- Componentes: `VotingPage`, `ProjectCard`, `VoteControl` (▲ pontuação ▼), `AuditChart`.
 
 Detalhes de operação: [../guias/votacao-presencial.md](../guias/votacao-presencial.md).
 

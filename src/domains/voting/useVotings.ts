@@ -1,10 +1,10 @@
 import { useCallback, useRef, useState } from "react"
-import { applyVote } from "./ballot"
 import { votingLimits } from "./content"
 import type { Project, VoteDirection, Voting } from "./model"
+import { applyVote } from "./voteRule"
 import { makeVotingId, persistStore, readStore, type VotingStore } from "./votingStore"
 
-// Estado das votações (agregado Voting) e suas operações. Persistência em votingStore.ts; regra do voto em ballot.ts.
+// Estado das votações (agregado Voting) e suas operações. Persistência em votingStore.ts; regra do voto em voteRule.ts.
 export function useVotings() {
   const [store, setStore] = useState<VotingStore>(readStore)
   const storeRef = useRef(store)
@@ -25,7 +25,7 @@ export function useVotings() {
     const normalizedTitle = title.trim()
     if (!normalizedTitle) throw new Error("Informe um nome para a votação.")
     const id = makeVotingId()
-    const nextVoting: Voting = { id, title: normalizedTitle.slice(0, 80), createdAt: Date.now(), projects: [], ballots: {} }
+    const nextVoting: Voting = { id, title: normalizedTitle.slice(0, 80), createdAt: Date.now(), projects: [] }
     commit({ ...storeRef.current, votings: [...storeRef.current.votings, nextVoting] })
     return id
   }, [commit])
@@ -38,7 +38,7 @@ export function useVotings() {
     updateVoting(votingId, (voting) => {
       if (voting.projects.length >= votingLimits.maxProjects) return voting
       const nextId = Math.max(0, ...voting.projects.map((project) => project.id)) + 1
-      return { ...voting, projects: [...voting.projects, { id: nextId, name: "", image: "", ups: 0, downs: 0 }] }
+      return { ...voting, projects: [...voting.projects, { id: nextId, name: "", image: "", votes: 0 }] }
     })
   }, [updateVoting])
 
@@ -74,16 +74,13 @@ export function useVotings() {
     reader.readAsDataURL(file)
   }, [editProject])
 
-  // Códigos que já votaram no sistema antigo (um voto por código) não podem abrir uma sessão de votante.
-  const isLocked = useCallback((voterHash: string) => storeRef.current.lockedCodes.includes(voterHash), [])
-
-  // ▲/▼ estilo Reddit: clicar de novo desfaz, clicar no oposto troca. Cédula e contadores são gravados juntos.
-  const castVote = useCallback((votingId: string, voterHash: string, projectId: number, direction: VoteDirection) => {
-    const voting = storeRef.current.votings.find((v) => v.id === votingId)
-    if (!voting) throw new Error("Votação não encontrada. Volte à lista e entre novamente.")
-    if (!voting.projects.some((project) => project.id === projectId)) throw new Error("Projeto não encontrado. Atualize a página e tente novamente.")
-    updateVoting(votingId, (current) => applyVote(current, voterHash, projectId, direction))
+  // ▲ soma 1 e ▼ tira 1 da pontuação do projeto, que nunca fica abaixo de zero.
+  const castVote = useCallback((votingId: string, projectId: number, direction: VoteDirection) => {
+    updateVoting(votingId, (voting) => ({
+      ...voting,
+      projects: voting.projects.map((project) => project.id === projectId ? { ...project, votes: applyVote(project.votes, direction) } : project),
+    }))
   }, [updateVoting])
 
-  return { votings: store.votings, createVoting, deleteVoting, addProject, setName, setImage, isLocked, castVote }
+  return { votings: store.votings, createVoting, deleteVoting, addProject, setName, setImage, castVote }
 }

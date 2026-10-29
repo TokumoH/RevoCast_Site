@@ -22,14 +22,9 @@ Convenções de nomes: [arquitetura/adr/ADR-004-convencao-de-nomes.md](arquitetu
 | Perfis | `Member.profiles`, `MemberProfiles` | LinkedIn e GitHub de um integrante. |
 | Nuvem de palavras | domínio `wordcloud`, `CloudWord` | Página onde palavras digitadas crescem conforme se repetem. |
 | Votação | `Voting` | Uma rodada de votação (ex.: "Feira de Projetos 2026"); agrega projetos e votos. |
-| Projeto | `Project` | Item votável dentro de uma votação (até `votingLimits.maxProjects`); guarda `ups` e `downs`. |
-| Voto ▲/▼ | `VoteDirection` (`1` ou `-1`), `VoteControl` | Voto estilo Reddit: ▲ a favor, ▼ contra; clicar de novo desfaz, clicar no oposto troca. |
-| Pontuação | `projectScore()` | ▲ − ▼ de um projeto; ordena o ranking da auditoria. |
-| Cédula | `Ballot`, `Voting.ballots` | Votos de um votante numa votação (projeto → ▲/▼), indexada pelo hash do código. |
-| Votante / sessão | `Voter`, `useVoterSession`, `VoterPanel` | Pessoa que digitou um código válido; a sessão dura até "passar a vez", 2 min sem votos ou recarregar. |
-| Código bloqueado | `lockedCodes` | Código que já votou no sistema antigo (um voto por código); não abre sessão. |
-| Código de voto | `scripts/vote-code.mjs` | Código de uso único (`RV-XXXX-XXXX`) entregue a cada participante. |
-| Hash do código | `public/vote-code-hashes.json` | Versão irreversível do código, publicada para validar sem expor a lista. |
+| Projeto | `Project` | Item votável dentro de uma votação (até `votingLimits.maxProjects`). |
+| Voto ▲/▼ | `VoteDirection` (`1` ou `-1`), `VoteControl`, `castVote` | ▲ soma 1 ponto, ▼ tira 1 ponto; sem código, cada clique conta. |
+| Pontuação | `Project.votes`, `applyVote()`, `MIN_VOTES` | Pontos de um projeto; nunca fica abaixo de zero (▼ desativado em 0). |
 | Auditoria | `audit()`, `AuditResult`, `AuditChart` | Contagem final dos votos com o vencedor (ou empate). |
 
 ## 2. Termos visuais (estilo "colagem de adesivos")
@@ -64,6 +59,7 @@ Convenções de nomes: [arquitetura/adr/ADR-004-convencao-de-nomes.md](arquitetu
 | Hook | prefixo `use…` | Função React que liga o modelo aos componentes (estado, carregamento, persistência). O arquivo tem o nome do hook principal. |
 | Adaptador | `episodes/api.ts`, `episodes/youtube.ts`, `api/episodes.ts` | Código que conversa com serviços externos e traduz para o modelo. |
 | Store | `voting/votingStore.ts` | Persistência de um agregado (leitura, validação, migração e gravação no `localStorage`). |
+| Regra | `voting/voteRule.ts` | Função pura com uma regra de negócio (ex.: pontuação mínima zero). |
 | Rota | `links.pages`, `useHashRoute`, `Route` | Página atual, lida do `#/…` do endereço. |
 | Âncora | `links.anchors` | Link para uma seção dentro da home (`#episodios`…). |
 | Configuração | `shared/config/` | Links, imagens e dados do site usados por vários domínios. |
