@@ -34,12 +34,18 @@ pontas são ignorados (`Café`, `cafe` e `cafe!` são a mesma palavra). A nuvem 
 
 ## voting
 
-Crie uma votação, entre nela e cadastre até 10 projetos (`votingLimits.maxProjects`), cada um com imagem, nome e
-botão de voto com código. Projetos não podem ser excluídos pela interface; votações inteiras podem.
+Crie uma votação, entre nela e cadastre até 10 projetos (`votingLimits.maxProjects`), cada um com imagem e nome.
+O votante digita o código uma vez e vota com ▲/▼ (estilo Reddit). Projetos não podem ser excluídos pela interface;
+votações inteiras podem.
 
-- `model.ts`: entidade agregadora `Voting`.
-- `audit.ts`: contagem e vencedor (empates aparecem como "Empate no topo").
-- `useVotings.ts` / `useProjects.ts`: persistência no `localStorage`.
+- `model.ts`: agregado `Voting` (projetos + `ballots`), `Project` (`ups`, `downs`), `Ballot`, `VoteDirection`.
+- `ballot.ts`: regra pura do voto (`nextDirection`, `applyVote`) e `projectScore`/`projectVotes`.
+- `audit.ts`: ranking pela pontuação e vencedor (empates aparecem como "Empate no topo").
+- `voteCodes.ts`: validação do código (formato, SHA-256, lote em `public/vote-code-hashes.json`).
+- `votingStore.ts`: leitura/gravação no `localStorage` e migração dos formatos antigos (v1, v2 → v3).
+- `useVotings.ts`: estado das votações e operações (criar, excluir, projetos, `castVote`).
+- `useVoterSession.ts`: sessão do votante na memória, com encerramento por inatividade.
+- Componentes: `VotingPage`, `VoterPanel`, `ProjectCard`, `VoteControl` (▲ pontuação ▼), `AuditChart`.
 
 Detalhes de operação: [../guias/votacao-presencial.md](../guias/votacao-presencial.md).
 
@@ -52,6 +58,8 @@ número de pessoas (4 por linha no computador, 3 no tablet, 2 no celular) e cent
 - Modelo: `Member` com `profiles?: MemberProfiles` (LinkedIn/GitHub). Os perfis são dados do integrante, por isso
   ficam no domínio, não em `shared/config/links.ts` (ADR-003).
 - Componentes: `TeamPage`, `MemberCard`, `MemberDecal`, `MemberLinks`.
+- Decals por cargo em `public/images/team/decals/` (megafone, roteiro, ferramenta, microfone, no-ar, pincel, curtida,
+  prancheta, ideia, claquete); cada integrante aponta para o seu em `content.ts`.
 - Cartões de mesmo tamanho: cada bloco de texto reserva espaço fixo; o cartão é um *container* CSS, então texto e
   botões se ajustam à largura do cartão (`cqi`, `@container`).
 - A faixa usa `Ticker` de `shared/ui` com a lista `teamTicker`.

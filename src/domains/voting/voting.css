@@ -7,9 +7,31 @@
 .project__image:focus-within { outline: 3px solid var(--cyan); outline-offset: 3px; }
 .project__image .image-slot { border-radius: 0; }
 .project__image .image-slot--empty span { max-width: 80%; line-height: 1.4; text-align: center; }
-.project .btn { justify-content: center; }
-.project__like { width: 20px; height: 20px; color: #fff; }
-.project .btn--light .project__like { color: var(--cyan-soft); }
+.project__footer { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 12px; }
+.project__footer .field { min-width: 0; }
+
+/* Voto ▲/▼ estilo Reddit: seta, pontuação e seta; a seta ativa fica colorida (aria-pressed) */
+.vote { display: grid; justify-items: center; gap: 2px; }
+.vote__btn { display: grid; place-items: center; width: 44px; height: 38px; padding: 0; color: var(--paper); background: #fff; border: var(--border); border-radius: 12px; box-shadow: 2px 2px 0 var(--ink); cursor: pointer; transition: transform 0.12s, box-shadow 0.12s, background 0.12s; }
+.vote__btn:hover:not(:disabled) { transform: translate(-1px, -1px); box-shadow: 3px 3px 0 var(--ink); }
+.vote__btn:active:not(:disabled) { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.vote__btn:focus-visible { outline: 3px solid var(--cyan); outline-offset: 2px; }
+.vote__btn:disabled { cursor: not-allowed; opacity: 0.45; }
+.vote__btn--up[aria-pressed="true"] { color: #fff; background: var(--pink); }
+.vote__btn--down[aria-pressed="true"] { color: #fff; background: var(--cyan); }
+.vote__arrow { width: 22px; height: 22px; }
+.vote__score { min-width: 44px; font: 400 26px/1.1 var(--font-display); text-align: center; }
+.vote.is-up .vote__score { color: var(--pink); }
+.vote.is-down .vote__score { color: #0e7490; }
+
+/* Painel do votante (código digitado uma vez) */
+.voter { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; max-width: 860px; margin: 0 0 40px; padding: 22px 24px; }
+.voter__form { display: grid; gap: 12px; width: 100%; }
+.voter__text { display: grid; justify-items: start; gap: 6px; }
+.voter__text h3 { margin: 0; font-size: 28px; }
+.voter__text .note { margin: 0; }
+.voter__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+.voter__row .field { min-width: 0; }
 
 /* Cartão "adicionar projeto" */
 .project-add { display: grid; gap: 12px; place-content: center; justify-items: center; min-height: 300px; padding: 20px; font: 400 22px/1.1 var(--font-display); color: var(--ink); background: transparent; border: var(--border); border-style: dashed; border-radius: var(--radius); }
@@ -27,27 +49,25 @@ button.project-add:hover { background: var(--cyan-soft); transform: rotate(-1deg
 .audit__winner strong { font: 400 28px/1 var(--font-display); }
 .audit__star { width: 34px; height: 34px; color: var(--pink); }
 .audit__chart { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
-.audit__row { display: grid; grid-template-columns: minmax(70px, 28%) 1fr 28px; align-items: center; gap: 12px; font-weight: 800; }
-.audit__label { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.audit__row { display: grid; grid-template-columns: minmax(70px, 28%) 1fr 40px; align-items: center; gap: 12px; font-weight: 800; }
+.audit__label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .audit__track { display: block; height: 30px; background: #fff; border: 2.5px solid var(--ink); border-radius: 999px; }
 .audit__fill { display: block; height: 100%; background: var(--cyan); border: 2.5px solid var(--ink); border-radius: 999px; }
 .audit__row.is-champion .audit__fill { background: var(--pink); }
+.audit__row.is-negative .audit__fill { background: var(--gray); }
+.audit__detail { display: block; font: 700 12px/1.2 var(--font-body); color: var(--gray); }
 .audit__value { font: 400 22px/1 var(--font-display); text-align: right; }
 .audit__total { justify-self: end; }
 @media (max-width: 600px) {
   .voting__grid { grid-template-columns: 1fr; }
-  .audit__row { grid-template-columns: 1fr 28px; }
+  .audit__row { grid-template-columns: 1fr 40px; }
+  .voter__row { grid-template-columns: 1fr; }
+  .voter__row .btn { justify-content: center; }
   .audit__label { grid-column: 1 / -1; }
 }
 
-.project__vote { display: grid; gap: 7px; }
-.project__code-label { font-size: 13px; font-weight: 800; }
-.project__vote-row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 8px; }
-.project__code { min-width: 0; width: 100%; }
-.project__vote-message { margin: 0; font-size: 13px; font-weight: 800; }
-.project__vote-row .btn { white-space: nowrap; }
 
-/* Gestão de votações: cada votação agrupa seus próprios projetos, votos e códigos consumidos. */
+/* Gestão de votações: cada votação agrupa seus próprios projetos e cédulas. */
 .voting-create { display: grid; gap: 10px; max-width: 860px; margin: 0 0 36px; }
 .voting-create > label { font-weight: 800; }
 .voting-create__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: stretch; gap: 14px; }

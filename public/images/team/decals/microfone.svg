@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Decal: microfone retrô com brilhos">
+  <circle cx="80" cy="80" r="72" fill="#d83868" stroke="#1b1b22" stroke-width="6"/>
+  <circle cx="80" cy="80" r="58" fill="#fffaf4" stroke="#1b1b22" stroke-width="4" stroke-dasharray="8 7"/>
+  <rect x="58" y="30" width="44" height="64" rx="22" fill="#27bfe8" stroke="#1b1b22" stroke-width="5"/>
+  <path d="M60 52h40M60 64h40M60 76h40" stroke="#1b1b22" stroke-width="4"/>
+  <path d="M46 78q0 34 34 34t34-34" fill="none" stroke="#1b1b22" stroke-width="6" stroke-linecap="round"/>
+  <path d="M80 112v16M62 130h36" stroke="#1b1b22" stroke-width="6" stroke-linecap="round"/>
+  <path d="M124 34l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#ffe27a" stroke="#1b1b22" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M34 98l3 7 7 3-7 3-3 7-3-7-7-3 7-3z" fill="#ffe27a" stroke="#1b1b22" stroke-width="3" stroke-linejoin="round"/>
+</svg>

@@ -35,7 +35,7 @@ export const images = {
 /**
  * Foto de um integrante da página Equipe: informe só o NOME DO ARQUIVO guardado em public/images/team/.
  * Ex.: teamPhoto("ana.jpg"). Vazio (teamPhoto("")) = o site mostra um espaço reservado.
- * Os integrantes ficam em src/domains/team/data.ts.
+ * Os integrantes ficam em src/domains/team/content.ts.
  */
 export const teamPhoto = (file: string) => slot(file ? `team/${file}` : "")
 

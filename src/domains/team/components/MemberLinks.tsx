@@ -4,7 +4,7 @@ import type { MemberProfiles } from "../model"
 
 type Props = { profiles?: MemberProfiles; name: string }
 
-// Botões de LinkedIn e GitHub, abaixo da foto. Os links vêm do campo "profiles" do integrante (team/data.ts).
+// Botões de LinkedIn e GitHub, abaixo da foto. Os links vêm do campo "profiles" do integrante (team/content.ts).
 // Link vazio = o botão não aparece. O bloco é sempre renderizado (vazio, se for o caso) para reservar a
 // mesma altura em todos os cartões.
 export default function MemberLinks({ profiles = {}, name }: Props) {

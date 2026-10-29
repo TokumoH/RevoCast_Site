@@ -9,7 +9,7 @@
 | **Episódios** (textos da seção e fallback) | `src/domains/episodes/content.ts`, `src/domains/episodes/fallback.ts` |
 | Textos da abertura e do menu (inclusive o link **Equipe**, que fica por último) e os links **Nuvem** e **Votação** do cabeçalho | `src/domains/brand/content.ts` |
 | Textos e limites da página **Nuvem de palavras** | `src/domains/wordcloud/content.ts` |
-| Textos e limites da página **Votação** (inclui o máximo de projetos) | `src/domains/voting/content.ts` |
+| Textos e limites da página **Votação** (máximo de projetos, tempo da sessão do votante) | `src/domains/voting/content.ts` |
 | **Equipe**: adicionar/remover pessoas, trocar nome, título e foto, textos da página | `src/domains/team/content.ts` (fotos em `public/images/team/`) |
 | **Equipe**: LinkedIn e GitHub de cada pessoa | `src/domains/team/content.ts` (campo `profiles` de cada pessoa) |
 | Texto "Sobre", números e selos | `src/domains/about/content.ts` |
@@ -74,7 +74,7 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 | **Trocar o título** (função) | Mude o campo `role`. O nome é o campo `name`. |
 | **Trocar a foto** de alguém | Salve a imagem em `public/images/team/` (ideal vertical 4:5, ex. 800×1000; jpg, png, webp ou svg) e escreva só o nome do arquivo em `teamPhoto("arquivo.jpg")`. Usando o **mesmo nome** do arquivo atual, não precisa editar nada. |
 | **Trocar LinkedIn/GitHub** | Mude os endereços em `profiles` na linha da pessoa. Link vazio (`""`) = o botão não aparece. |
-| **Trocar o decal** (adesivo do canto do cartão) | Todos usam `public/images/team/decals/placeholder.svg` (`images.team.decal`): substitua o arquivo para trocar o de todos. Para um decal só de uma pessoa, salve em `public/images/team/decals/` e use `decal: teamDecal("arquivo.png")` na linha dela. |
+| **Trocar o decal** (adesivo do canto do cartão) | Cada pessoa tem um decal ligado ao cargo: `decal: teamDecal("microfone.svg")` na linha dela. Disponíveis em `public/images/team/decals/`: `megafone`, `roteiro`, `ferramenta`, `microfone`, `no-ar`, `pincel`, `curtida`, `prancheta`, `ideia`, `claquete`. Para um novo, salve o arquivo (SVG ou PNG quadrado, fundo transparente) na pasta e use o nome dele. Sem `decal`, a pessoa usa o padrão `placeholder.svg` (`images.team.decal`). |
 | **Mudar a ordem** | A ordem da lista `members` é a ordem na página. |
 | Trocar a **foto de toda a equipe** | Substitua `public/images/team/equipe-toda.jpeg` (ou mude `images.team.group` em `images.ts`). O enquadramento é `object-position` em `.team-hero__photo img` (`team.css`). |
 | Mudar textos do topo, da seção, da faixa e dos botões | `teamCopy` e `teamTicker` em `src/domains/team/content.ts`. |

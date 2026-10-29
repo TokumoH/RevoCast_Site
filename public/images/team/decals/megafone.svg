@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Decal: megafone com coroa">
+  <circle cx="80" cy="86" r="68" fill="#fffaf4" stroke="#1b1b22" stroke-width="6"/>
+  <path d="M40 76h16l44-26v70L56 96H40z" fill="#d83868" stroke="#1b1b22" stroke-width="5" stroke-linejoin="round"/>
+  <rect x="28" y="74" width="16" height="24" rx="5" fill="#27bfe8" stroke="#1b1b22" stroke-width="5"/>
+  <path d="M58 96l8 24h12l-6-22" fill="#d8b888" stroke="#1b1b22" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M110 68q10 17 0 34M121 58q17 27 0 54" fill="none" stroke="#27bfe8" stroke-width="6" stroke-linecap="round"/>
+  <path d="M56 46l6-22 12 12 10-16 10 16 12-12 6 22z" fill="#ffe27a" stroke="#1b1b22" stroke-width="5" stroke-linejoin="round" transform="rotate(-12 80 36)"/>
+</svg>

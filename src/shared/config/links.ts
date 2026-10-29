@@ -1,6 +1,6 @@
 /**
  * Links do site (plataformas, contato, rotas e âncoras).
- * Perfis de integrantes (LinkedIn/GitHub) ficam no domínio team: src/domains/team/data.ts.
+ * Perfis de integrantes (LinkedIn/GitHub) ficam no domínio team: src/domains/team/content.ts.
  * Link vazio ("") = o botão ou ícone correspondente não aparece (ou fica desativado).
  */
 export const links = {

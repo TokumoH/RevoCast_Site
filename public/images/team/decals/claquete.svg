@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-label="Decal: claquete">
+  <circle cx="80" cy="82" r="70" fill="#d8b888" stroke="#1b1b22" stroke-width="6"/>
+  <rect x="30" y="70" width="100" height="60" rx="6" fill="#1b1b22" stroke="#1b1b22" stroke-width="5"/>
+  <path d="M40 86h80M40 100h52M40 114h66" stroke="#fffaf4" stroke-width="4" stroke-linecap="round"/>
+  <path d="M30 70h100V56H30z" fill="#fffaf4" stroke="#1b1b22" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M46 56l-8 14M66 56l-8 14M86 56l-8 14M106 56l-8 14M126 56l-8 14" stroke="#1b1b22" stroke-width="5"/>
+  <g transform="rotate(-18 30 54)">
+    <path d="M30 40h100v14H30z" fill="#fffaf4" stroke="#1b1b22" stroke-width="5" stroke-linejoin="round"/>
+    <path d="M44 40l8 14M64 40l8 14M84 40l8 14M104 40l8 14M124 40l6 10" stroke="#d83868" stroke-width="5"/>
+  </g>
+  <circle cx="30" cy="55" r="5" fill="#27bfe8" stroke="#1b1b22" stroke-width="3"/>
+</svg>
