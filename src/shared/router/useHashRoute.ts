@@ -1,12 +1,13 @@
 import { useSyncExternalStore } from "react"
 import { links } from "@/shared/config/links"
 
-export type Route = "home" | "cloud" | "voting"
+export type Route = "home" | "cloud" | "voting" | "team"
 
 // Rotas das páginas interativas. Qualquer outro "#" (ex.: #sobre) é uma âncora da página inicial.
 const pages: Record<string, Route> = {
   [links.pages.cloud]: "cloud",
   [links.pages.voting]: "voting",
+  [links.pages.team]: "team",
 }
 
 const subscribe = (onChange: () => void) => {

@@ -5,11 +5,11 @@ import "../brand.css"
 
 const REPEATS = 3 // repetições dos temas em cada grupo (garante largura suficiente)
 
-function Group() {
+function Group({ themes }: { themes: string[] }) {
   return (
     <div className="ticker__group">
       {Array.from({ length: REPEATS }).flatMap((_, r) =>
-        tickerThemes.map((theme) => (
+        themes.map((theme) => (
           <Fragment key={`${r}-${theme}`}>
             <span>{theme}</span>
             <Star className="ticker__star" />
@@ -21,13 +21,14 @@ function Group() {
 }
 
 // Faixa decorativa que corre sem parar. Dois grupos iguais: o loop não tem emenda.
-export default function ThemeTicker() {
+// Sem "themes", usa os temas da página inicial (tickerThemes); outras páginas podem passar a própria lista.
+export default function ThemeTicker({ themes = tickerThemes }: { themes?: string[] }) {
   return (
     <div className="ticker-wrap" aria-hidden="true">
       <div className="ticker">
         <div className="ticker__track">
-          <Group />
-          <Group />
+          <Group themes={themes} />
+          <Group themes={themes} />
         </div>
       </div>
     </div>

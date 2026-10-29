@@ -5,11 +5,12 @@ import { JoinSection } from "@/domains/community"
 import { ContactSection } from "@/domains/contact"
 import { WordCloudPage } from "@/domains/wordcloud"
 import { VotingPage } from "@/domains/voting"
+import { TeamPage } from "@/domains/team"
 import { useEffect, useRef } from "react"
 import { useHashRoute } from "@/shared/router"
 
 // Ordem das seções da página inicial. Para reordenar, mude a ordem abaixo.
-// As páginas interativas (Nuvem e Votação) ficam sempre montadas e só são escondidas,
+// As outras páginas (Nuvem, Votação e Equipe) ficam sempre montadas e só são escondidas,
 // assim a nuvem e os projetos não se perdem quando o usuário troca de página.
 export default function App() {
   const route = useHashRoute()
@@ -43,6 +44,9 @@ export default function App() {
         </div>
         <div hidden={route !== "voting"}>
           <VotingPage />
+        </div>
+        <div hidden={route !== "team"}>
+          <TeamPage />
         </div>
       </main>
       <Footer />

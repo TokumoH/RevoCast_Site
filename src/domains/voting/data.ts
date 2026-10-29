@@ -1,9 +1,9 @@
 // ✏️ Textos e limites da página "Votação".
 export const votingCopy = {
   eyebrow: "Votação",
-  title: "Quem leva a taça?",
-  note: "um clique vota, outro clique tira o voto",
-  empty: "Nenhum projeto ainda. Adicione o primeiro!",
+  title: "Gerenciar votações",
+  note: "Crie uma votação antes de cadastrar os projetos. Os dados ficam salvos neste navegador.",
+  empty: "Esta votação ainda não tem projetos. Adicione o primeiro!",
   addLabel: "Adicionar projeto",
   full: "Limite de projetos atingido",
   imageLabel: "Clique para adicionar a logo ou capa",
@@ -11,14 +11,12 @@ export const votingCopy = {
   namePlaceholder: "Nome do projeto",
   nameLabel: "Nome do projeto",
   vote: "Votar",
-  voted: "Votado",
-  remove: "Remover projeto",
-  audit: "Auditar",
+  audit: "Auditar resultados",
   auditTitle: "Resultado da auditoria",
   chartLabel: "Gráfico de votos por projeto",
-  champion: "Campeão da votação",
+  champion: "Projeto vencedor",
   tie: "Empate no topo",
-  noVotes: "Ninguém votou ainda. Vote em algum projeto e audite de novo.",
+  noVotes: "Ninguém votou ainda. Registre um voto e audite novamente.",
 }
 
 export const votingLimits = {

@@ -52,6 +52,19 @@
   .header__pages .chip { padding: 6px 11px; font-size: 13px; }
   .header__side .btn { padding: 8px 14px; }
 }
+/* Telas bem estreitas: 3 páginas (Nuvem, Votação, Equipe) + botão continuam cabendo */
+@media (max-width: 480px) {
+  .header__inner { gap: 8px; }
+  .header__brand img { width: 40px; height: 40px; }
+  .header__side { gap: 6px; }
+  .header__pages { gap: 4px; }
+  .header__pages .chip { padding: 5px 8px; font-size: 11.5px; letter-spacing: 0.02em; }
+  .header__side .btn { padding: 7px 11px; font-size: 14px; }
+}
+/* Menos de 340px: só as páginas ficam no cabeçalho (o botão Assistir já está no topo da home) */
+@media (max-width: 340px) {
+  .header__side .btn { display: none; }
+}
 
 @media (max-width: 900px) {
   .header__nav { display: none; }

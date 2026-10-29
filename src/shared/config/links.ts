@@ -21,6 +21,7 @@ export const links = {
   pages: {
     cloud: "#/nuvem",
     voting: "#/votacao",
+    team: "#/equipe",
   },
   // Âncoras internas (navegação dentro da página)
   anchors: {

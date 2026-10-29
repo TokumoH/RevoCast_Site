@@ -23,11 +23,12 @@ Para publicar na Vercel, conecte o repositório ao projeto. O arquivo `vercel.js
 | Quero mudar... | Arquivo |
 |---|---|
 | **Links** (YouTube, Instagram, TikTok, Spotify, Amazon Music, e-mail, WhatsApp, formulário) | `src/shared/config/links.ts` |
-| **Imagens** (logo, capas de episódios, foto da equipe) | `src/shared/config/images.ts` (arquivos em `public/images/`) |
+| **Imagens** (logo, capas de episódios, foto da equipe, foto de toda a equipe na página Equipe) | `src/shared/config/images.ts` (arquivos em `public/images/`) |
 | **Episódios** (textos da seção e fallback) | `src/domains/episodes/data.ts`, `src/domains/episodes/fallback.ts` |
-| Textos da abertura e do menu (e os links **Nuvem** e **Votação** do cabeçalho) | `src/domains/brand/data.ts` |
+| Textos da abertura e do menu (e os links **Nuvem**, **Votação** e **Equipe** do cabeçalho) | `src/domains/brand/data.ts` |
 | Textos e limites da página **Nuvem de palavras** | `src/domains/wordcloud/data.ts` |
 | Textos e limites da página **Votação** (inclui o máximo de projetos) | `src/domains/voting/data.ts` |
+| **Equipe**: adicionar/remover pessoas, trocar nome, título e foto, textos da página | `src/domains/team/data.ts` (fotos em `public/images/team/`) |
 | Texto "Sobre", números e selos | `src/domains/about/data.ts` |
 | Textos de "Participe" (convidados e plateia) | `src/domains/community/data.ts` |
 | Textos de "Contato" e plataformas | `src/domains/contact/data.ts` |
@@ -50,7 +51,8 @@ revocast-site/
 │   └── images/                # TODAS as imagens, em pastas por domínio
 │       ├── brand/             #   logo.png
 │       ├── episodes/          #   capas personalizadas dos episódios
-│       ├── about/             #   foto da equipe
+│       ├── about/             #   foto da equipe (seção Sobre)
+│       ├── team/              #   página Equipe: foto de toda a equipe (equipeToda.jpeg) e fotos dos integrantes
 │       └── community/         #   (reservada para imagens de convidados/plateia)
 └── src/
     ├── app/                   # Camada de aplicação: monta a página
@@ -66,7 +68,7 @@ revocast-site/
     │   │   ├── useReveal.ts   #     detecta quando o elemento aparece na tela
     │   │   ├── Reveal.tsx     #     envolve um conteúdo para entrar com animação
     │   │   └── Float.tsx      #     faz o conteúdo flutuar
-    │   ├── router/            #   página atual lida do "#" do endereço (home, nuvem, votação)
+    │   ├── router/            #   página atual lida do "#" do endereço (home, nuvem, votação, equipe)
     │   ├── styles/
     │   │   ├── tokens.css     #   cores, bordas, sombras e fontes
     │   │   └── base.css       #   reset e tipografia
@@ -90,6 +92,7 @@ revocast-site/
         ├── community/         # Convidados e plateia ("Participe")
         ├── contact/           # Plataformas e formas de contato
         ├── wordcloud/         # Página interativa "Nuvem de palavras" (#/nuvem)
+        ├── team/              # Página "Equipe" (#/equipe): foto de toda a equipe, logo e integrantes
         └── voting/            # Página interativa "Votação" com auditoria (#/votacao)
 ```
 
@@ -162,12 +165,13 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 
 **Mudar as cores:** edite `src/shared/styles/tokens.css`. As cores atuais vêm da logo (rosa, azul-claro e areia).
 
-## Páginas interativas (Nuvem e Votação)
+## Páginas (Nuvem, Votação e Equipe)
 
-Além da página inicial, o site tem duas páginas interativas, abertas pelos links **Nuvem** e **Votação** no canto
-direito do cabeçalho. Elas usam rotas por `#` (`#/nuvem` e `#/votacao`, definidas em `links.pages`), então funcionam
+Além da página inicial, o site tem três páginas, abertas pelos links **Nuvem**, **Votação** e **Equipe** no canto
+direito do cabeçalho. Elas usam rotas por `#` (`#/nuvem`, `#/votacao` e `#/equipe`, definidas em `links.pages`), então funcionam
 em qualquer hospedagem estática sem configurar servidor. As páginas ficam sempre montadas em `src/app/App.tsx` e só
-são escondidas: trocar de página não apaga a nuvem nem os projetos. Recarregar o navegador zera tudo (nada é salvo).
+são escondidas ao trocar de rota. A nuvem de palavras é mantida em memória; as votações, projetos, votos e códigos
+consumidos são persistidos no `localStorage` do navegador usado pela organização.
 
 - **Nuvem de palavras** (`domains/wordcloud`): cada palavra digitada entra na nuvem; repetir aumenta o tamanho dela.
   Maiúsculas, acentos e pontuação nas pontas são ignorados (`Café`, `cafe` e `cafe!` são a mesma palavra). Um texto
@@ -179,11 +183,16 @@ são escondidas: trocar de página não apaga a nuvem nem os projetos. Recarrega
     lugar livre mais perto do centro numa espiral que começa num ângulo próprio da palavra, sem sobrepor as outras.
     Quem já está na tela fica onde está; só muda de lugar quem passa a bater em outra palavra. Se a nuvem lota, todas
     as palavras diminuem um pouco para caber. Espaço entre palavras e margens: constantes `GAP` e `INSET` em `layout.ts`.
-- **Votação** (`domains/voting`): até 10 projetos (`votingLimits.maxProjects`), cada um com imagem (logo/capa),
-  nome e botão de voto que liga e desliga, como o like do YouTube. O botão **Auditar** conta os votos e mostra o
-  gráfico de barras com o campeão (empates aparecem como "Empate no topo"). A contagem está em `audit.ts`.
-- Os votos ficam só no navegador de quem está usando a página (sem servidor), então cada pessoa vota uma vez por
-  projeto. Para somar votos de várias pessoas é preciso um servidor, como a função em `api/`.
+- **Votação** (`domains/voting`): primeiro crie uma votação e entre nela; só então cadastre até 10 projetos
+  (`votingLimits.maxProjects`), cada um com imagem (logo/capa), nome e botão de voto com código de validação.
+  Projetos não podem ser excluídos pela interface para evitar remoções acidentais; votações inteiras podem ser excluídas.
+  **Auditar resultados** gera um gráfico de barras com o projeto vencedor (empates aparecem como "Empate no topo").
+  A contagem está em `audit.ts` e a entidade agregadora `Voting` fica em `model.ts`.
+- Votações, projetos, contagem de votos e códigos consumidos ficam no `localStorage` do navegador de organização.
+  Isso se destina a uma feira presencial em um único computador; não sincroniza os votos entre computadores.
+
+- **Equipe** (`domains/team`): página `#/equipe` com a foto de toda a equipe e a logo do RevoCast no topo e, abaixo,
+  um cartão para cada integrante. Veja a seção "Página Equipe" abaixo.
 
 **Adicionar outra página interativa:** crie o domínio, adicione a rota em `links.pages` e em `shared/router/useHashRoute.ts`,
 o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
@@ -193,3 +202,79 @@ o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
 - `links.platforms.amazonMusic`, `links.contact.whatsapp` e `links.contact.guestForm` ainda podem ser preenchidos conforme os links estiverem disponíveis.
 - A foto da equipe ainda é conteúdo editável localmente. As estatísticas são totais do canal e podem incluir vídeos que não sejam episódios do podcast.
 - Sem as variáveis da API ou quando a consulta falha, a seção de episódios usa `src/domains/episodes/fallback.ts`.
+
+## Votação presencial com códigos (sem serviço externo)
+
+A votação foi simplificada para uma feira presencial de um dia, com **um único computador e navegador**. Não exige Redis, cadastro de usuário, login, segredo de servidor ou configuração de API externa.
+
+### Preparar os códigos antes da feira
+
+Na raiz do projeto, execute:
+
+```bash
+# Gere 100 códigos para distribuir (pode escolher de 1 a 5000)
+npm run vote-codes -- generate 100
+```
+
+O comando cria dois arquivos:
+
+- `private/vote-codes.txt`: os códigos em texto puro para a organização imprimir ou distribuir. **Não publique nem envie esse arquivo ao site.** A pasta `private/` fica fora do Git.
+- `public/vote-code-hashes.json`: somente os hashes dos códigos, usados pelo site para validar a digitação sem publicar a lista original em texto puro.
+
+Depois de gerar o lote, publique/republique o site normalmente para que o arquivo de hashes vá junto com a aplicação. Gere o lote **antes de iniciar a votação** e não execute o gerador novamente no meio da feira, porque isso substitui a lista de códigos aceitos. Distribua um código por participante.
+
+### Conferir um código no terminal
+
+Para conferir se um código faz parte do lote gerado:
+
+```bash
+npm run vote-codes -- validate RV-ABCD-2345
+```
+
+Substitua o exemplo pelo código recebido. A conferência consulta o lote no arquivo `public/vote-code-hashes.json`; ela confirma que o código pertence ao lote, mas não revela se ele já foi usado pelo navegador.
+
+### Como o uso único funciona
+
+O site calcula o hash do código digitado e verifica se ele consta no arquivo de hashes. Os hashes utilizados ficam numa lista global no `localStorage` do navegador, compartilhada por todas as votações. Um código só pode registrar um voto no site inteiro, mesmo após atualizar a página ou entrar em outra votação. A cada voto válido, o total do projeto é incrementado — o botão não funciona como alternância de like.
+
+### Fluxo de votação
+
+1. Abra **Votação** no menu e crie uma votação com um nome, por exemplo, `Feira de Projetos 2026`.
+2. Clique em **Entrar na votação**.
+3. Adicione os projetos (até 10), preencha os nomes e, se desejar, suas imagens.
+4. Digite um código no cartão do projeto escolhido e clique em **Votar**. Depois, use **Auditar resultados** para ver a contagem.
+5. Use **Todas as votações** para voltar à lista. A organização pode excluir uma votação completa, mas não pode excluir projetos individualmente.
+
+Cada votação guarda seu próprio conjunto de projetos e votos. Os códigos consumidos ficam em uma lista global compartilhada entre as votações: o mesmo código não pode ser reutilizado ao entrar em outra votação. Excluir uma votação apaga seus projetos e resultados, mas não libera novamente os códigos já utilizados. O projeto migra automaticamente dados de uma versão anterior para uma votação chamada `Votação anterior`, quando encontra dados legados não vazios.
+
+Os nomes, imagens, contagens de votos e códigos consumidos ficam salvos no navegador utilizado durante a feira. Portanto:
+
+- Use sempre o mesmo computador e o mesmo perfil do navegador durante o evento.
+- Não utilize janela anônima e não limpe os dados do site enquanto a votação estiver em andamento.
+- Os votos não são sincronizados entre computadores nem enviados para um banco remoto. Para esta votação de um dia, mantenha o computador como ponto único de apuração.
+- A lista de códigos consumidos é global para todas as votações deste navegador. Excluir uma votação não restaura os códigos utilizados nela.
+
+### Limites conhecidos
+
+Esta é uma barreira simples contra a reutilização acidental de códigos, não um sistema antifraude robusto. Como a validação acontece no navegador e os resultados ficam no armazenamento local, alguém com conhecimento técnico e acesso ao computador pode alterar os dados do navegador; limpar os dados do site também apagará a apuração. Os hashes evitam publicar os códigos em texto puro, mas não transformam o site em uma votação inviolável. Para uma competição informal de feira, com a organização controlando a distribuição dos códigos e mantendo o computador sob supervisão, essa solução evita a infraestrutura adicional.
+
+## Página Equipe
+
+Aberta pelo link **Equipe** do cabeçalho (`#/equipe`). Topo: foto de toda a equipe com a logo do RevoCast por cima.
+Abaixo: faixa animada e um cartão por integrante (cor e inclinação alternam sozinhas). A grade se ajusta a qualquer
+número de pessoas (4 por linha no computador, 3 no tablet, 2 no celular) e centraliza a última linha.
+
+| Quero... | Como |
+|---|---|
+| **Adicionar** uma pessoa | Em `src/domains/team/data.ts`, copie uma linha da lista `members` e cole no fim. |
+| **Remover** uma pessoa | Apague a linha dela em `members`. |
+| **Trocar o título** (função) | Mude o campo `role`. O nome é o campo `name`. |
+| **Trocar a foto** de alguém | Salve a imagem em `public/images/team/` (ideal vertical 4:5, ex. 800×1000; jpg, png, webp ou svg) e escreva só o nome do arquivo em `teamPhoto("arquivo.jpg")`. Usando o **mesmo nome** do arquivo atual, não precisa editar nada. |
+| **Mudar a ordem** | A ordem da lista `members` é a ordem na página. |
+| Trocar a **foto de toda a equipe** | Substitua `public/images/team/equipeToda.jpeg` (ou mude `images.team.group` em `src/shared/config/images.ts`). O enquadramento é `object-position` em `.team-hero__photo img` (`team.css`). |
+| Mudar textos do topo, da seção e da faixa | `teamCopy` e `teamTicker` em `src/domains/team/data.ts`. |
+| Frase e Instagram do cartão (opcionais) | Campos `tagline` e `instagram` (usuário sem `@`). Podem ser apagados. |
+
+As 10 imagens atuais (`membro01.svg` … `membro10.svg`) e os nomes "Integrante 01…10" são **exemplos**: troque pelas fotos e
+nomes reais. Foto vazia (`teamPhoto("")`) ou arquivo que não existe mostra um espaço reservado, sem quebrar a página.
+A faixa da página usa o mesmo componente `ThemeTicker` da home, que agora aceita uma lista própria (`themes`).

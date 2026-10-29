@@ -33,7 +33,7 @@ export const removeWord = (current: CloudWord[], key: string): CloudWord[] => cu
 
 // Tamanho em px: cresce com a raiz da contagem para a palavra não "explodir" na tela.
 export const wordSize = (count: number) =>
-  Math.min(cloudSize.max, Math.round(cloudSize.min + cloudSize.step * (Math.sqrt(count) - 1)))
+  Math.min(cloudSize.max, Math.round(cloudSize.min + cloudSize.step * (Math.log2(count))))
 
 // Número fixo por palavra (mesma palavra, mesma cor e inclinação sempre).
 export function wordHash(key: string) {

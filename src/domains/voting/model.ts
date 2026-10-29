@@ -1,9 +1,17 @@
-// Um projeto na votação. "image" vazia = espaço reservado; "voted" = o voto (como o like do YouTube).
+// Projeto pertencente a uma votação específica. Os dados ficam no navegador da organização.
 export type Project = {
   id: number
   name: string
   image: string
-  voted: boolean
+  votes: number
+}
+
+// Votação é a entidade principal: ela existe antes dos projetos e agrupa os projetos e seus votos.
+export type Voting = {
+  id: string
+  title: string
+  createdAt: number
+  projects: Project[]
 }
 
 // Linha do gráfico da auditoria.

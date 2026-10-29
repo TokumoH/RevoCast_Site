@@ -3,7 +3,7 @@ import type { AuditResult, Project } from "./model"
 
 // Conta os votos e monta o ranking. Empates ficam todos como campeões.
 export function audit(projects: Project[]): AuditResult {
-  const counted = projects.map((p, i) => ({ id: p.id, label: projectLabel(p.name, i), votes: p.voted ? 1 : 0 }))
+  const counted = projects.map((p, i) => ({ id: p.id, label: projectLabel(p.name, i), votes: p.votes }))
   const top = Math.max(0, ...counted.map((r) => r.votes))
   const rows = counted
     .map((r) => ({ ...r, ratio: top ? r.votes / top : 0 }))

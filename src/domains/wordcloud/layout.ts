@@ -44,11 +44,11 @@ const free = (r: Rect, s: Size, placed: Rect[]) => inside(r, s) && !placed.some(
 const centerOf = (s: Size): Point => ({ x: s.w / 2, y: (INSET.top + s.h - INSET.bottom) / 2 })
 
 // Espiral a partir do centro (esticada na horizontal, porque a nuvem é mais larga que alta).
-function findSpot(word: CloudWord, scale: number, size: Size, placed: Rect[]): Point | null {
+function findSpot(word: CloudWord, scale: number, size: Size, placed: Rect[], seed: number): Point | null {
   const box = boxOf(word, scale)
   const c = centerOf(size)
   const stretch = clamp(size.w / size.h, 1, 2.4)
-  const start = (wordHash(word.key) % 628) / 100 // ângulo inicial (0 a 2π)
+  const start = ((wordHash(word.key) + placed.length * 137 + seed * 97) % 628) / 100 // ângulos variados; a composição muda conforme a nuvem cresce
   let turn = 0
   for (let i = 0; i < 20000; i++) {
     const r = 3.2 * turn
@@ -61,14 +61,14 @@ function findSpot(word: CloudWord, scale: number, size: Size, placed: Rect[]): P
 }
 
 // Tenta posicionar todas as palavras num tamanho; quem já tinha lugar livre fica onde estava.
-function attempt(words: CloudWord[], keep: Record<string, Point>, size: Size, scale: number) {
+function attempt(words: CloudWord[], keep: Record<string, Point>, size: Size, scale: number, seed: number) {
   const placed: Rect[] = []
   const pos: Record<string, Point> = {}
   let ok = true
   for (const word of words) {
     const box = boxOf(word, scale)
-    let p: Point | null = keep[word.key] ?? null
-    if (!p || !free(rectAt(p, box), size, placed)) p = findSpot(word, scale, size, placed)
+    let p: Point | null = seed === 0 ? (keep[word.key] ?? null) : null
+    if (!p || !free(rectAt(p, box), size, placed)) p = findSpot(word, scale, size, placed, seed)
     if (!p) {
       ok = false
       p = centerOf(size)
@@ -91,9 +91,12 @@ function remap(prev: Layout | null, size: Size): Record<string, Point> {
 export function computeLayout(words: CloudWord[], prev: Layout | null, size: Size): Layout {
   const base = clamp(Math.min(size.w / 1000, size.h / 460), 0.5, 1) // telas menores começam com palavras menores
   const keep = remap(prev, size)
+  // Recompõe a nuvem quando a quantidade de palavras muda; prioriza as maiores para que o centro não fique preso à primeira palavra.
+  const ordered = [...words].sort((a, b) => wordSize(b.count) - wordSize(a.count) || wordHash(a.key) - wordHash(b.key))
+  const seed = words.length
   // Se não coube, diminui todas as palavras um pouco e tenta de novo.
   for (let scale = base; ; scale *= 0.92) {
-    const { ok, pos } = attempt(words, keep, size, scale)
+    const { ok, pos } = attempt(ordered, keep, size, scale, seed)
     if (ok || scale * 0.92 < MIN_SCALE) return { size, scale, pos }
   }
 }

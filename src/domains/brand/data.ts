@@ -9,10 +9,11 @@ export const nav = [
   { label: "Contato", href: links.anchors.contact },
 ]
 
-// ✏️ Páginas interativas (canto direito do cabeçalho)
+// ✏️ Páginas (canto direito do cabeçalho): Nuvem, Votação e Equipe
 export const pageNav: { label: string; href: string; route: Route }[] = [
   { label: "Nuvem", href: links.pages.cloud, route: "cloud" },
   { label: "Votação", href: links.pages.voting, route: "voting" },
+  { label: "Equipe", href: links.pages.team, route: "team" },
 ]
 
 export const hero = {
