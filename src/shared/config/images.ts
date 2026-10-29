@@ -26,4 +26,21 @@ export const images = {
   about: {
     team: slot("about/equipeRevocast.jpeg"), // foto da equipe (public/images/about/)
   },
+  team: {
+    group: slot("team/equipeToda.jpeg"), // foto de TODA a equipe, no topo da página Equipe (public/images/team/)
+    sticker: slot("team/stickers/placeholder.svg"), // sticker padrão dos cartões (public/images/team/stickers/)
+  },
 }
+
+/**
+ * Foto de um integrante da página Equipe: informe só o NOME DO ARQUIVO guardado em public/images/team/.
+ * Ex.: teamPhoto("ana.jpg"). Vazio (teamPhoto("")) = o site mostra um espaço reservado.
+ * Os integrantes ficam em src/domains/team/data.ts.
+ */
+export const teamPhoto = (file: string) => slot(file ? `team/${file}` : "")
+
+/**
+ * Sticker (adesivo) de um integrante, no canto do cartão: informe só o NOME DO ARQUIVO guardado em
+ * public/images/team/stickers/. Ex.: teamSticker("ana.png"). Quem não tem sticker próprio usa images.team.sticker.
+ */
+export const teamSticker = (file: string) => slot(file ? `team/stickers/${file}` : "")

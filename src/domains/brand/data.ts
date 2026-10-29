@@ -7,6 +7,7 @@ export const nav = [
   { label: "Sobre", href: links.anchors.about },
   { label: "Participe", href: links.anchors.join },
   { label: "Contato", href: links.anchors.contact },
+  { label: "Equipe", href: links.pages.team }, // página Equipe (#/equipe), sempre por último
 ]
 
 // ✏️ Páginas interativas (canto direito do cabeçalho)

@@ -22,12 +22,14 @@ Para publicar na Vercel, conecte o repositório ao projeto. O arquivo `vercel.js
 
 | Quero mudar... | Arquivo |
 |---|---|
-| **Links** (YouTube, Instagram, TikTok, Spotify, Amazon Music, e-mail, WhatsApp, formulário) | `src/shared/config/links.ts` |
-| **Imagens** (logo, capas de episódios, foto da equipe) | `src/shared/config/images.ts` (arquivos em `public/images/`) |
+| **Links** (YouTube, Instagram, TikTok, Spotify, Amazon Music, e-mail, WhatsApp, formulário, LinkedIn/GitHub dos integrantes) | `src/shared/config/links.ts` |
+| **Imagens** (logo, capas de episódios, foto da equipe, foto de toda a equipe e sticker padrão da página Equipe) | `src/shared/config/images.ts` (arquivos em `public/images/`) |
 | **Episódios** (textos da seção e fallback) | `src/domains/episodes/data.ts`, `src/domains/episodes/fallback.ts` |
-| Textos da abertura e do menu (e os links **Nuvem** e **Votação** do cabeçalho) | `src/domains/brand/data.ts` |
+| Textos da abertura e do menu (inclusive o link **Equipe**, que fica por último) e os links **Nuvem** e **Votação** do cabeçalho | `src/domains/brand/data.ts` |
 | Textos e limites da página **Nuvem de palavras** | `src/domains/wordcloud/data.ts` |
 | Textos e limites da página **Votação** (inclui o máximo de projetos) | `src/domains/voting/data.ts` |
+| **Equipe**: adicionar/remover pessoas, trocar nome, título e foto, textos da página | `src/domains/team/data.ts` (fotos em `public/images/team/`) |
+| **Equipe**: LinkedIn e GitHub de cada pessoa | `src/shared/config/links.ts` (`links.team`) |
 | Texto "Sobre", números e selos | `src/domains/about/data.ts` |
 | Textos de "Participe" (convidados e plateia) | `src/domains/community/data.ts` |
 | Textos de "Contato" e plataformas | `src/domains/contact/data.ts` |
@@ -50,7 +52,9 @@ revocast-site/
 │   └── images/                # TODAS as imagens, em pastas por domínio
 │       ├── brand/             #   logo.png
 │       ├── episodes/          #   capas personalizadas dos episódios
-│       ├── about/             #   foto da equipe
+│       ├── about/             #   foto da equipe (seção Sobre)
+│       ├── team/              #   página Equipe: foto de toda a equipe (equipeToda.jpeg) e fotos dos integrantes
+│       │   └── stickers/      #     stickers dos cartões (placeholder.svg = sticker padrão)
 │       └── community/         #   (reservada para imagens de convidados/plateia)
 └── src/
     ├── app/                   # Camada de aplicação: monta a página
@@ -66,7 +70,7 @@ revocast-site/
     │   │   ├── useReveal.ts   #     detecta quando o elemento aparece na tela
     │   │   ├── Reveal.tsx     #     envolve um conteúdo para entrar com animação
     │   │   └── Float.tsx      #     faz o conteúdo flutuar
-    │   ├── router/            #   página atual lida do "#" do endereço (home, nuvem, votação)
+    │   ├── router/            #   página atual lida do "#" do endereço (home, nuvem, votação, equipe)
     │   ├── styles/
     │   │   ├── tokens.css     #   cores, bordas, sombras e fontes
     │   │   └── base.css       #   reset e tipografia
@@ -90,6 +94,7 @@ revocast-site/
         ├── community/         # Convidados e plateia ("Participe")
         ├── contact/           # Plataformas e formas de contato
         ├── wordcloud/         # Página interativa "Nuvem de palavras" (#/nuvem)
+        ├── team/              # Página "Equipe" (#/equipe): foto de toda a equipe, logo e integrantes
         └── voting/            # Página interativa "Votação" com auditoria (#/votacao)
 ```
 
@@ -162,10 +167,10 @@ usam: `Sticker` (props `reveal`, `delay`, `hover`), `Reveal`, `Float`, `SectionT
 
 **Mudar as cores:** edite `src/shared/styles/tokens.css`. As cores atuais vêm da logo (rosa, azul-claro e areia).
 
-## Páginas interativas (Nuvem e Votação)
+## Páginas (Nuvem, Votação e Equipe)
 
-Além da página inicial, o site tem duas páginas interativas, abertas pelos links **Nuvem** e **Votação** no canto
-direito do cabeçalho. Elas usam rotas por `#` (`#/nuvem` e `#/votacao`, definidas em `links.pages`), então funcionam
+Além da página inicial, o site tem três páginas: **Nuvem** e **Votação**, abertas pelos chips no canto direito do
+cabeçalho, e **Equipe**, aberta pelo último link do menu (depois de Contato). Elas usam rotas por `#` (`#/nuvem`, `#/votacao` e `#/equipe`, definidas em `links.pages`), então funcionam
 em qualquer hospedagem estática sem configurar servidor. As páginas ficam sempre montadas em `src/app/App.tsx` e só
 são escondidas ao trocar de rota. A nuvem de palavras é mantida em memória; as votações, projetos, votos e códigos
 consumidos são persistidos no `localStorage` do navegador usado pela organização.
@@ -187,6 +192,9 @@ consumidos são persistidos no `localStorage` do navegador usado pela organizaç
   A contagem está em `audit.ts` e a entidade agregadora `Voting` fica em `model.ts`.
 - Votações, projetos, contagem de votos e códigos consumidos ficam no `localStorage` do navegador de organização.
   Isso se destina a uma feira presencial em um único computador; não sincroniza os votos entre computadores.
+
+- **Equipe** (`domains/team`): página `#/equipe` com a foto de toda a equipe e a logo do RevoCast no topo e, abaixo,
+  um cartão para cada integrante. Veja a seção "Página Equipe" abaixo.
 
 **Adicionar outra página interativa:** crie o domínio, adicione a rota em `links.pages` e em `shared/router/useHashRoute.ts`,
 o link em `pageNav` (`domains/brand/data.ts`) e o bloco em `src/app/App.tsx`.
@@ -252,3 +260,37 @@ Os nomes, imagens, contagens de votos e códigos consumidos ficam salvos no nave
 
 Esta é uma barreira simples contra a reutilização acidental de códigos, não um sistema antifraude robusto. Como a validação acontece no navegador e os resultados ficam no armazenamento local, alguém com conhecimento técnico e acesso ao computador pode alterar os dados do navegador; limpar os dados do site também apagará a apuração. Os hashes evitam publicar os códigos em texto puro, mas não transformam o site em uma votação inviolável. Para uma competição informal de feira, com a organização controlando a distribuição dos códigos e mantendo o computador sob supervisão, essa solução evita a infraestrutura adicional.
 
+## Página Equipe
+
+Aberta pelo link **Equipe**, o último do menu do cabeçalho (depois de Contato), em `#/equipe`. Topo: foto de toda a equipe
+com a logo do RevoCast por cima. Abaixo: faixa animada e um cartão por integrante (cor e inclinação alternam sozinhas),
+cada um com um **sticker** no canto superior esquerdo, os botões de **LinkedIn** e **GitHub** logo abaixo da foto, nome,
+título e frase. A grade se ajusta a qualquer número de pessoas (4 por linha no computador, 3 no tablet, 2 no celular) e
+centraliza a última linha. No celular os botões de LinkedIn/GitHub mostram só o ícone.
+
+Os **links** e as **imagens** ficam em arquivos separados, como no resto do projeto:
+
+| O quê | Onde |
+|---|---|
+| Pessoas, nomes, títulos, frases e referência das fotos/stickers | `src/domains/team/data.ts` |
+| **Links** (LinkedIn e GitHub de cada pessoa) | `src/shared/config/links.ts`, em `links.team` |
+| **Imagens** (foto da equipe toda, sticker padrão e helpers `teamPhoto`/`teamSticker`) | `src/shared/config/images.ts` (arquivos em `public/images/team/`) |
+
+| Quero... | Como |
+|---|---|
+| **Adicionar** uma pessoa | 1) Em `src/domains/team/data.ts`, copie uma linha da lista `members`, cole no fim e dê um `id` novo (ex.: `"ana"`). 2) Em `links.ts`, adicione `ana: { linkedin: "...", github: "..." }` dentro de `links.team`. Sem o passo 2 o cartão aparece normalmente, só sem os botões. |
+| **Remover** uma pessoa | Apague a linha dela em `members` (e, se quiser, a entrada dela em `links.team`). |
+| **Trocar o título** (função) | Mude o campo `role`. O nome é o campo `name`. |
+| **Trocar a foto** de alguém | Salve a imagem em `public/images/team/` (ideal vertical 4:5, ex. 800×1000; jpg, png, webp ou svg) e escreva só o nome do arquivo em `teamPhoto("arquivo.jpg")`. Usando o **mesmo nome** do arquivo atual, não precisa editar nada. |
+| **Trocar LinkedIn/GitHub** | Mude os endereços em `links.team["<id>"]` (`links.ts`). Link vazio (`""`) = o botão não aparece. |
+| **Trocar o sticker** | Todos usam `public/images/team/stickers/placeholder.svg` (`images.team.sticker`): substitua o arquivo para trocar o de todos. Para um sticker só de uma pessoa, salve em `public/images/team/stickers/` e use `sticker: teamSticker("arquivo.png")` na linha dela. |
+| **Mudar a ordem** | A ordem da lista `members` é a ordem na página. |
+| Trocar a **foto de toda a equipe** | Substitua `public/images/team/equipeToda.jpeg` (ou mude `images.team.group` em `images.ts`). O enquadramento é `object-position` em `.team-hero__photo img` (`team.css`). |
+| Mudar textos do topo, da seção, da faixa e dos botões | `teamCopy` e `teamTicker` em `src/domains/team/data.ts`. |
+
+As 10 fotos (`membro01.svg` … `membro10.svg`), os nomes "Integrante 01…10", o sticker e os links de LinkedIn/GitHub atuais
+são **exemplos**: os links levam só à página inicial das redes. Troque pelos reais. Foto ou sticker vazio, ou arquivo que não
+existe, não quebra a página (foto mostra espaço reservado; sticker some).
+Componentes do domínio (`src/domains/team/components/`): `TeamPage` (página), `MemberCard` (cartão), `MemberSticker`
+(adesivo) e `MemberLinks` (botões de LinkedIn/GitHub). Os ícones ficam em `shared/ui/Icons.tsx`.
+A faixa da página usa o mesmo componente `ThemeTicker` da home, que aceita uma lista própria (`themes`).
